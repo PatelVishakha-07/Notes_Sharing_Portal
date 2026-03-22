@@ -156,9 +156,9 @@ NOTEPORTAL <span>CMS</span>
 
 <a href="/admin/dashboard" class="active">Dashboard</a>
 
-<a href="/admin/category">Add Category</a>
+<a href="list_category">Manage Category</a>
 
-<a href="/admin/notes">Add Subjects</a>
+<a href="list_subject">Manage Subjects</a>
 
 <a href="/admin/users">Manage Users</a>
 
@@ -187,7 +187,6 @@ NOTEPORTAL <span>CMS</span>
 <!-- CONTENT -->
 
 <div class="content">
-    <p>Content</p>
 
 @yield('content')
 

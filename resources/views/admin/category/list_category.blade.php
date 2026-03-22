@@ -1,3 +1,7 @@
+@extends('layouts.admin_layout')
+
+@section('content')
+
 <table border="1px" style="text-align: center; width: 100%;">
     <tr>
         <th>Category Id</th>
@@ -19,3 +23,5 @@
 
 <br><br>
 <a href="{{url('add_category')}}">Add Category</a>
+
+@endsection

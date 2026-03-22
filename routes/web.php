@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 
+
 //Category
 Route::get("add_category",[CategoryController::class,"addCategoryPage"]);
 Route::post("save_category",[CategoryController::class,"saveCategory"]);
@@ -18,5 +19,5 @@ Route::get("delete_subject/{id}",[SubjectController::class,"deleteSubject"]);
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Authentication.login');
 });
