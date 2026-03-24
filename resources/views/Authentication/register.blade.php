@@ -60,29 +60,63 @@
                 <h2 class="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
                 <p class="text-slate-500 mb-8 font-medium">Register your credentials below.</p>
 
-                <form action="" method="POST" class="space-y-4">
+                <form action="{{url('process_register')}}" method="POST" class="space-y-4">
                     @csrf
                     
                     <div>
                         <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">Full Name</label>
-                        <input type="text" name="name" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="e.g. Alex Johnson" required>
+                        <input type="text" name="name" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="e.g. Alex Johnson" >
                     </div>
+
+                    <!-- -- Name Validation -->
+                    @error('name')
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+                            <strong class="font-bold">Error:</strong>
+                            <span class="block sm:inline">{{ $message }}</span>
+                        </div>
+                    @enderror
 
                     <div>
                         <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">Your Email</label>
-                        <input type="email" name="email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="alex@university.edu" required>
+                        <input type="email" name="email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="alex@university.edu" >
                     </div>
+
+                    <!-- -- Email Validation -->
+                    @error('email')
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+                            <strong class="font-bold">Error:</strong>
+                            <span class="block sm:inline">{{ $message }}</span>
+                        </div>
+                    @enderror
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">Password</label>
-                            <input type="password" name="password" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" required>
+                            <input type="password" name="password" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" >
                         </div>
+
+                        <!-- -- Password Validation -->
+                    @error('password')
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+                            <strong class="font-bold">Error:</strong>
+                            <span class="block sm:inline">{{ $message }}</span>
+                        </div>
+                    @enderror
+
+
                         <div>
                             <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" required>
+                            <input type="password" name="password_confirmation" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" >
                         </div>
                     </div>
+
+                    <!-- -- password confirmation Validation -->
+                    @error('password_confirmation')
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+                            <strong class="font-bold">Error:</strong>
+                            <span class="block sm:inline">{{ $message }}</span>
+                        </div>
+                    @enderror
 
                     <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all mt-4">
                         Initialize Registration
@@ -92,12 +126,19 @@
                 <div class="mt-8 text-center">
                     <p class="text-sm text-slate-500 font-medium">
                         Already have an account? 
-                        <a href="" class="text-indigo-600 font-bold hover:underline ml-1">Sign In</a>
+                        <a href="{{url('login')}}" class="text-indigo-600 font-bold hover:underline ml-1">Sign In</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Password and Confirm Password Doesn't Match -->
+    @session('error')
+        <div class="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+            <strong class="font-bold">Error:</strong>
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endsession
 </body>
 </html>

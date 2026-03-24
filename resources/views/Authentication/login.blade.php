@@ -80,7 +80,7 @@
                 <h2 class="text-3xl font-bold text-gray-900 mb-2 italic">Welcome back!</h2>
                 <p class="text-gray-500 mb-8">Please enter your details to access your dashboard.</p>
 
-                <form action="" method="POST" class="space-y-5">
+                <form action="{{url('process_login')}}" method="POST" class="space-y-5">
                     @csrf
                     <div>
                         <label class="text-sm font-semibold text-gray-700 block mb-2">Your Email</label>
@@ -91,6 +91,10 @@
                             <input type="email" name="email" class="pl-10 w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none" placeholder="you@university.edu">
                         </div>
                     </div>
+
+                    @error('email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
 
                     <div>
                         <div class="flex justify-between mb-2">
@@ -105,6 +109,10 @@
                         </div>
                     </div>
 
+                    @error('password')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p> 
+                    @enderror
+
                     <div class="flex items-center">
                         <input type="checkbox" id="remember" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                         <label for="remember" class="ml-2 text-sm text-gray-600 font-medium">Keep me logged in</label>
@@ -118,12 +126,19 @@
                 <div class="mt-8 text-center">
                     <p class="text-sm text-gray-500 font-medium">
                         New to the platform? 
-                        <a href="" class="text-indigo-700 font-bold hover:underline ml-1">Create an account</a>
+                        <a href="{{url('register')}}" class="text-indigo-700 font-bold hover:underline ml-1">Create an account</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
+
+    @session('error')
+        <div class="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-md" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endsession
 
 </body>
 </html>
