@@ -22,7 +22,7 @@
             <td>{{$n->category->cat_name}}</td>
             <td>{{$n->subject->sub_name}}</td>
             @foreach ($n->filePath as $fp)
-                <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="btn btn-sm btn-primary"> Open PDF </a>
+                <td> <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="btn btn-sm btn-primary"> Open PDF </a> </td>
             @endforeach
             <td>
                 <a href="{{url('user/edit_notes_page/'.$n->id)}}">Edit</a> / 

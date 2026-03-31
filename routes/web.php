@@ -12,7 +12,7 @@ Route::get("admin_dashboard",[AuthController::class,"adminDashboard"]);
 //User
 Route::get("user_dashboard",[AuthController::class,"userDashboard"]);
 Route::get("user/upload_notes",[NotesController::class,"uploadNotePage"]);
-Route::get("user/save_notes",[NotesController::class,"saveNote"]);
+Route::post("user/save_notes",[NotesController::class,"saveNote"]);
 
 Route::get("user/getSubjects/{cat_id}",[NotesController::class,"getSubjects"]);
 

@@ -23,6 +23,10 @@ class NotesController extends Controller
     }
 
     public function saveNote(Request $request){
+
+        // echo "<pre>";
+        // print_r($request->all());die;
+
         $request->validate([
             "title"=>"required",
             "cat_id"=>"required",
@@ -36,7 +40,7 @@ class NotesController extends Controller
             "cat_id"=>$request->cat_id,
             "sub_id"=>$request->sub_id,
             "visibility"=>$request->visibility,
-            "user_id"=>Auth::user()
+            "user_id"=>Auth::id()
         ]);
 
         foreach($request->file("file") as $f){
@@ -44,9 +48,11 @@ class NotesController extends Controller
             $f->move(public_path("storage"),$fnm);
 
             FilePath::create([
-                "notes_id"=>$notes,
+                "notes_id"=>$notes->id,
                 "file_path"=>$fnm
             ]);
+
+            echo "inserted file";
         }
     }
 

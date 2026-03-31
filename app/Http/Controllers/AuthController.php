@@ -26,6 +26,12 @@ class AuthController extends Controller
     }
 
     public function processLogin(Request $request){
+
+        // echo "<pre>";
+        // print_r($request->all());
+        // print_r(FacadesAuth::user()->role);
+        // die;
+
         $request->validate([
             "email"=>"required",
             "password"=>"required|min:6"
@@ -37,8 +43,8 @@ class AuthController extends Controller
             "password"=>$request->password]))
         {
             $role = FacadesAuth::user()->role;
-            if($role == "admin"){
-                return redirect("list_category");
+            if($role == "Admin"){
+                return redirect("admin_dashboard");
             }else{
                 return redirect("user_dashboard");
             }
@@ -70,4 +76,6 @@ class AuthController extends Controller
 
         return redirect("login")->with("success","Registration successful. Please login.");
     }
+
+    
 }

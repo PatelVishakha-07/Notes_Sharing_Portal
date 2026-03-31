@@ -31,7 +31,7 @@
 
 <div class="mb-3">
     <label>Upload File</label>
-    <input type="file" name="file" class="form-control">
+    <input type="file" name="file[]" class="form-control" multiple accept="">
 </div>
 
 <div class="mb-3">
