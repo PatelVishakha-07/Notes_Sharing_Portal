@@ -12,4 +12,8 @@ class Subject extends Model
     public function category(){
         return $this->belongsTo(Category::class,"cat_id");
     }
+
+    public function notes(){
+        return $this->hasMany(Notes::class, "sub_id");
+    }
 }

@@ -12,4 +12,8 @@ class Category extends Model
     public function subject(){
         return $this->hasMany(Subject::class,"cat_id");
     }
+
+    public function notes(){
+        return $this->hasMany(Notes::class, "cat_id");
+    }
 }

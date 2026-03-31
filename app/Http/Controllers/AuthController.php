@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class AuthController extends Controller
 {
+
+    public function adminDashboard(){
+        $totalSubjects = Subject::get()->count();
+        $totalCategory = Category::get()->count();
+        return view("admin.dashboard", compact("totalSubjects","totalCategory"));
+    }
 
     public function userDashboard(){
         return view("user.dashboard");
@@ -21,7 +29,7 @@ class AuthController extends Controller
         $request->validate([
             "email"=>"required",
             "password"=>"required|min:6"
-        ]);
+        ]);        
        
 
         if (FacadesAuth::attempt([

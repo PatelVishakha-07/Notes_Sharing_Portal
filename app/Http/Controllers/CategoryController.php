@@ -32,4 +32,20 @@ class CategoryController extends Controller
         Category::find($id)->delete();
         return redirect("list_category")->with("Category deleted successfully");
     }
+
+    public function editCategoryPage($id){
+        $category = Category::find($id);
+        return view("admin.category.edit",compact("category"));
+    }
+    public function editCategory(Request $request){
+        $request->validate([
+            "cat_name"=>"required"
+        ]);
+
+        $category = Category::find($request->id);
+        $category->cat_name = $request->cat_name;
+        $category->save();
+
+        return redirect("list_category");
+    }
 }

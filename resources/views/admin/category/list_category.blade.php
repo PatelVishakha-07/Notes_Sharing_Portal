@@ -6,7 +6,7 @@
     <tr>
         <th>Category Id</th>
         <th>Category Name</th>
-        <th>Delete</th>
+        <th>Action</th>
     </tr>
 
     @foreach($category as $c)
@@ -14,7 +14,10 @@
     <tr>
         <td>{{$c->id}}</td>
         <td>{{$c->cat_name}}</td>
-        <td> <a href="{{url('delete_category',$c->id)}}">Delete</a> </td>
+        <td>
+            <a href="{{url('edit_category_page',$c->id)}}">Edit</a> / 
+            <a href="{{url('delete_category',$c->id)}}">Delete</a> 
+        </td>
     </tr>
 
     @endforeach

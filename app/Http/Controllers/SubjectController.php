@@ -36,4 +36,24 @@ class SubjectController extends Controller
         Subject::find($id)->delete();
         return redirect("list_subject")->with("Subject deleted successfully");
     }
+
+    public function editSubjectPage($id){
+        $category = Category::get();
+        $subject = Subject::find($id);
+        return view("admin.subject.edit", compact("subject","category"));
+    }
+
+    public function editSubject(Request $request){
+        $request->validate([
+            "sub_name"=>"required",
+            "cat_id"=>"required"
+        ]);
+
+        $subject = Subject::find($request->id);
+        $subject->sub_name = $request->sub_name;
+        $subject->cat_id = $request->cat_id;
+        $subject->save();
+
+        return redirect("list_subject");
+    }
 }
