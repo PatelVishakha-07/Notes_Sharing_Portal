@@ -2,11 +2,37 @@
 
 @section('content')
 
+<div class="row justify-content-center">
+    <div class="col-md-7">
 
-    <form method="POST" action="{{url('save_category')}}">
-        @csrf
-        Enter category name: <input type="text" name="cat_name"><br><br>
-        <button type="submit">Add</button>
-    </form>
+        <div class="card category-card">
+
+            <div class="card-header">
+                <h4>Add New Category</h4>
+                <p>Create categories to organize your notes</p>
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST" action="{{url('save_category')}}">
+                    @csrf
+
+                    <div class="form-group">
+                        <label>Category Name</label>
+                        <input type="text" name="cat_name" class="input-field" placeholder="Example: Programming, AI, Math">
+                    </div>
+
+                    <button type="submit" class="btn-primary mt-3">
+                        Add Category
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
 
 @endsection

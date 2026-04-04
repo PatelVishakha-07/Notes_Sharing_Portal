@@ -3,7 +3,8 @@
 <head>
 <title>NotePortal CMS</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+<link href="{{ asset('bootstrap-5.3.8-dist/css/bootstrap.min.css') }}" rel="stylesheet">
 
 <!-- COMMON CSS -->
 <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -21,14 +22,14 @@ NOTEPORTAL <span>CMS</span>
 
 <a href="{{ url('user_dashboard') }}"  class="{{ request()->is('user_dashboard') ? 'active' : '' }}"> Dashboard </a>
 
-<a href="{{ url('notes') }}"  class="{{ request()->is('notes*') ? 'active' : '' }}"> Notes </a>
+<a href="{{ url('user/list_notes') }}"  class="{{ request()->is('user/list_notes*') ? 'active' : '' }}"> Notes </a>
 
 <a href="{{ url('list_subject') }}" class="{{ request()->is('list_subject*') ? 'active' : '' }}"> Subjects </a>
 
 
 <br><br>
 
-<a href="/logout" style="color:#fb7185;">Logout</a>
+<a href="{{url('logout')}}" style="color:#fb7185;">Logout</a>
 
 </div>
 
@@ -55,4 +56,5 @@ NOTEPORTAL <span>CMS</span>
 </div>
 
 </body>
+<script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 </html>

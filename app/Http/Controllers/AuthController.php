@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Notes;
 use App\Models\Subject;
 use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class AuthController extends Controller
 {
+
+    public function logout(){
+        FacadesAuth::logout();
+        return redirect("login");
+    }
 
     public function adminDashboard(){
         $totalSubjects = Subject::get()->count();
@@ -18,7 +25,10 @@ class AuthController extends Controller
     }
 
     public function userDashboard(){
-        return view("user.dashboard");
+        $publicNotesCount = Notes::where("visibility","Public")->get()->count();
+        $privateNotesCount = Notes::where("visibility","Private")->get()->count();
+        $totalNotes = Notes::where("user_id",FacadesAuth::user()->id)->get()->count();
+        return view("user.dashboard", compact("privateNotesCount","publicNotesCount","totalNotes"));
     }
 
     public function loginPage(){

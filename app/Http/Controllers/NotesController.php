@@ -8,6 +8,7 @@ use App\Models\Notes;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use League\Flysystem\Visibility;
 
 class NotesController extends Controller
 {
@@ -34,12 +35,14 @@ class NotesController extends Controller
             "file"=>"required"
         ]);
 
+        $visibility = $request->visibility ? $request->visibility : "Public";
+
 
         $notes = Notes::create([
             "title"=>$request->title,
             "cat_id"=>$request->cat_id,
             "sub_id"=>$request->sub_id,
-            "visibility"=>$request->visibility,
+            "visibility" => $visibility,
             "user_id"=>Auth::id()
         ]);
 
@@ -50,15 +53,20 @@ class NotesController extends Controller
             FilePath::create([
                 "notes_id"=>$notes->id,
                 "file_path"=>$fnm
-            ]);
-
-            echo "inserted file";
+            ]);            
         }
+
+        return redirect("user/list_notes");
     }
 
     public function listNotes(){
         $user_id = Auth::id();
         $notes = Notes::with("subject","category","filePath","user")->where("user_id",$user_id)->get();
         return view("user.list", compact("notes"));
+    }
+
+    public function deleteNote($id){
+        Notes::where("id",$id)->delete();
+        return redirect("user/list_notes");
     }
 }

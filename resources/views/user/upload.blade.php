@@ -35,11 +35,10 @@
 </div>
 
 <div class="mb-3">
-    <label class="mb-1">Visibility</label>
-    <select name="visibility" class="form-control">
-        <option value="public">Public</option>
-        <option value="private">Private</option>
-    </select>
+    <label class="mb-1">Do you want to keep the notes private?</label><br>
+
+    <input type="checkbox" name="visibility" value="Private" id="private">
+    <label for="private">Private</label>
 </div>
 
 <button class="btn btn-primary">Upload</button>

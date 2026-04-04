@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class CategoryController extends Controller
 {
+    public function checkAdmin(){
+        if(!FacadesAuth::user()){
+            return redirect("login");
+        }
+    }
+
     public function addCategoryPage(){
         return view("admin.category.add_category");
     }
