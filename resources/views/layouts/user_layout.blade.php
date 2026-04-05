@@ -16,32 +16,70 @@
         <!-- SIDEBAR -->
         <div class="sidebar">
 
-        <div class="logo">
-        NOTEPORTAL <span>CMS</span>
-        </div>
-            <a href="{{ url('user_dashboard') }}"  class="{{ request()->is('user_dashboard') ? 'active' : '' }}"> Dashboard </a>
+             <div class="logo"> 📝 <span class="logo-text">NOTEPORTAL CMS</span> </div>
+            <a href="{{ url('user_dashboard') }}" class="{{ request()->is('user_dashboard') ? 'active' : '' }}" data-bs-toggle="tooltip"
+            data-bs-placement="right" title="Dashboard"> 📊 <span>Dashboard</span> </a>
 
-            <a href="{{ url('user/list_public_notes/Public') }}"  class="{{ request()->is('user/list_public_notes*') ? 'active' : '' }}"> Public Notes </a>
+            <a href="{{ url('user/list_public_notes/Public') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Public Notes">
+            🌍 <span>Public Notes</span> </a>
 
-            <a href="{{ url('user/list_private_notes/Private') }}" class="{{ request()->is('user/list_private_notes*') ? 'active' : '' }}"> Private Notes </a>
+            <a href="{{ url('user/list_private_notes/Private') }}" data-bs-toggle="tooltip" data-bs-placement="right"
+            title="Private Notes"> 🔒 <span>Private Notes</span> </a>
 
+            <a href="{{ url('user/show_search_notes') }}" data-bs-toggle="tooltip" data-bs-placement="right"
+            title="Search Notes"> 🔎 <span>Search Notes</span> </a>
+            
             <br><br>
-            <a href="{{url('logout')}}" style="color:#fb7185;">Logout</a>
+            <a href="{{url('logout')}}" style="color:#fb7185;" data-bs-toggle="tooltip" data-bs-placement="right" title="Logout">🚪 <span>Logout</span></a>
         </div>
 
-        <!-- HEADER -->
-        <div class="header">
-            <input type="text" class="search-box" placeholder="Search system resources...">
-        <div>
-            <strong>{{ auth()->user()->name }}</strong><br>
-            <small style="color:#64748b;">User Panel</small>
+       
+{{-- ============================================================================ --}}
+
+<!-- HEADER -->
+<div class="header d-flex justify-content-between align-items-center">
+
+    <!-- Left -->
+    <div class="d-flex align-items-center gap-3">
+
+    <!-- Toggle Button -->
+    <button id="menu-toggle" class="menu-toggle">
+        ☰
+    </button>
+
+    <h5 class="mb-0 fw-semibold">📚 Notes Portal</h5>
+
+    <a href="{{ url('user/show_search_notes') }}" class="search-trigger">
+        🔎 Search Notes
+    </a>
+
+</div>
+
+    <!-- Right -->
+    <div class="d-flex align-items-center gap-3">
+
+        <span class="text-muted">📅 {{ date('d M Y') }}</span>
+
+        <div class="user-box">
+            <div class="avatar">
+                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+            </div>
+
+            <div>
+                <strong>{{ auth()->user()->name }}</strong><br>
+                <small class="text-muted">User Panel</small>
+            </div>
         </div>
 
-        </div>
+    </div>
+
+</div>
+
+{{-- ============================================================================== --}}
 
         <!-- CONTENT -->
         <div class="content">
-        @yield('content')
+            @yield('content')
         </div>
 
         <!-- FOOTER -->
@@ -51,5 +89,17 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
+
+        <script>
+            document.getElementById("menu-toggle").addEventListener("click",function(){
+                document.body.classList.toggle("sidebar-collapsed");
+            });
+
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        </script>
     </body>
 </html>

@@ -478,3 +478,168 @@ select:disabled {
     border-radius:12px;
     box-shadow:0 8px 20px rgba(0,0,0,0.05);
 }
+
+
+.search-trigger{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 14px;
+    border:1px solid #e5e7eb;
+    border-radius:8px;
+    background:#f8fafc;
+    color:#334155;
+    text-decoration:none;
+    font-size:14px;
+    transition:0.2s;
+}
+
+.search-trigger:hover{
+    background:#e2e8f0;
+}
+
+.shortcut{
+    background:#e5e7eb;
+    padding:2px 6px;
+    border-radius:5px;
+    font-size:11px;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:36px;
+    height:36px;
+    background:#2563eb;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-weight:bold;
+}
+
+
+/* COLLAPSED SIDEBAR */
+
+.sidebar-collapsed .sidebar{
+    width:70px;
+}
+
+/* hide text only */
+.sidebar-collapsed .sidebar a span{
+    display:none;
+}
+
+/* center icons */
+.sidebar-collapsed .sidebar a{
+    justify-content:center;
+}
+
+/* logo hide text */
+.sidebar-collapsed .sidebar .logo span{
+    display:none;
+}
+
+/* layout shift */
+
+.sidebar-collapsed .header,
+.sidebar-collapsed .content,
+.sidebar-collapsed .footer{
+    margin-left:70px;
+}
+
+/* animation */
+
+.sidebar,
+.header,
+.content,
+.footer{
+    transition:0.3s;
+}
+
+/* ===== SIDEBAR ===== */
+
+.sidebar{
+    width:230px;
+    transition: width 0.3s ease;
+}
+
+/* sidebar links */
+
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+    transition:0.3s;
+}
+
+/* logo */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+/* smooth text animation */
+
+.sidebar span{
+    transition: opacity 0.2s ease;
+}
+
+/* ===== COLLAPSED SIDEBAR ===== */
+
+.sidebar-collapsed .sidebar{
+    width:70px;
+}
+
+/* hide text */
+
+.sidebar-collapsed .sidebar span{
+    opacity:0;
+    pointer-events:none;
+}
+
+/* center icons */
+
+.sidebar-collapsed .sidebar a{
+    justify-content:center;
+}
+
+/* ===== LAYOUT SHIFT ===== */
+
+.header,
+.content,
+.footer{
+    transition: margin-left 0.3s ease;
+}
+
+/* normal layout */
+
+.layout-user .header,
+.layout-user .content,
+.layout-user .footer{
+    margin-left:230px;
+}
+
+/* collapsed layout */
+
+.sidebar-collapsed .header,
+.sidebar-collapsed .content,
+.sidebar-collapsed .footer{
+    margin-left:70px;
+}
+
+.sidebar{
+    overflow:hidden;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,0.08);
+}

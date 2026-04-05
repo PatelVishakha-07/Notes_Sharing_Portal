@@ -85,4 +85,36 @@ class NotesController extends Controller
         Notes::where("id",$id)->delete();
         return redirect("user/list_public_notes/Public");
     }
+
+    public function showSearchPage(){
+        $category = Category::get();
+        $subject = Subject::get();
+        return view("user.search", compact("category","subject"));
+    }
+
+    public function searchNotes(Request $request){
+       
+        $category = Category::get();
+        $subject = Subject::get();
+        $notes = Notes::with("category","subject","filePath")->where("visibility","Public");
+
+        if($request->cat_id){
+            $notes = $notes->where("cat_id",$request->cat_id);
+        }
+        if($request->sub_id){
+            $notes = $notes->where("sub_id",$request->sub_id);
+        }
+        if($request->title){
+            $notes = $notes->where("title","like","%".$request->title."%");
+        }
+        $notes = $notes->get();
+        return view("user.search", compact("category","subject","notes"));
+    }
+
+    public function getPrivateNotes(Request $request){
+        $category = Category::get();
+        $subject = Subject::get();
+        $notes = Notes::with("category","subject","filePath")->where("access_code",$request->access_code)->get();
+        return view("user.search", compact("category","subject","notes"));
+    }
 }

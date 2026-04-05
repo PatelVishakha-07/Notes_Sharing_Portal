@@ -24,6 +24,9 @@ Route::prefix("user")->group(function(){
     Route::get("/list_private_notes/{status}",[NotesController::class,"listNotes"]);
     Route::get("/list_public_notes/{status}",[NotesController::class,"listNotes"]);
     Route::get("/delete_notes/{id}",[NotesController::class,"deleteNote"]);
+    Route::get("/show_search_notes",[NotesController::class,"showSearchPage"]);
+    Route::post("/search_notes",[NotesController::class,"searchNotes"]);
+    Route::post("/access_private_note",[NotesController::class,"getPrivateNotes"]);
 });
 
 

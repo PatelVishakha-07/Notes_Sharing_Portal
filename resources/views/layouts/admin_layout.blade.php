@@ -9,42 +9,74 @@
 <!-- COMMON CSS -->
 <link rel="stylesheet" href="{{ asset('style.css') }}">
 
-</head>
+</head> 
 
 <body class="layout-admin">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="logo">
-NOTEPORTAL <span>CMS</span>
+    <div class="logo">  <span>NOTEPORTAL CMS</span> </div>
+
+    <a href="{{url('admin_dashboard')}}" class="{{ request()->is('admin_dashboard') ? 'active' : '' }}" 
+        data-bs-placement="right" title="Dashboard" data-bs-toggle="tooltip">📊 <span>Dashboard</span></a>
+
+    <a href="{{url('list_category')}}" class="{{ request()->is('list_category') ? 'active' : '' }}" 
+        data-bs-placement="right" title="Category" data-bs-toggle="tooltip">📁 <span>Category</span></a>
+
+    <a href="{{url('list_subject')}}" class="{{ request()->is('list_subject') ? 'active' : '' }}" 
+        data-bs-placement="right" title="Subject" data-bs-toggle="tooltip">📚 <span>Subject</span></a>
+
+    <a href="{{url('admin/showPendingNotesList')}}" class="{{ request()->is('admin/showPendingNotesList') ? 'active' : '' }}"
+        data-bs-placement="right" title="Pending Notes" data-bs-toggle="tooltip">📊 <span>Pending Notes</span></a>
+
+    <a href="{{url('admin/showUsersList')}}" class="{{ request()->is('admin/showUsersList') ? 'active' : '' }}" 
+        data-bs-placement="right" title="Users" data-bs-toggle="tooltip">👥 <span>Users</span></a>
+
+    <a href="{{url('logout')}}" style="color:#fb7185;"
+    data-bs-placement="right" title="Logout" data-bs-toggle="tooltip">🚪 <span>Logout</span></a>
+
 </div>
 
-<a href="{{url('admin_dashboard')}}" class="{{ request()->is('admin_dashboard') ? 'active' : '' }}">Dashboard</a>
-
-<a href="{{url('list_category')}}" class="{{ request()->is('list_category') ? 'active' : '' }}">Category</a>
-
-<a href="{{url('list_subject')}}" class="{{ request()->is('list_subject') ? 'active' : '' }}">Subjects</a>
-
-<a href="{{url('admin/showPendingNotesList')}}" class="{{ request()->is('admin/showPendingNotesList') ? 'active' : '' }}">Pending Notes</a>
-
-<a href="{{url('admin/showUsersList')}}" class="{{ request()->is('admin/showUsersList') ? 'active' : '' }}">Users</a>
-
-<a href="{{url('logout')}}" style="color:#fb7185;">Logout</a>
-
-</div>
+{{-- ================================================================ --}}
 
 <!-- HEADER -->
-<div class="header">
+<div class="header d-flex justify-content-between align-items-center">
 
-<input type="text" class="search-box" placeholder="Search system resources...">
+    <!-- Left -->
+    <div class="d-flex align-items-center gap-3">
 
-<div>
-<strong>Admin User</strong><br>
-<small style="color:#64748b;">System Administrator</small>
+    <!-- Toggle Button -->
+    <button id="menu-toggle" class="menu-toggle">
+        ☰
+    </button>
+
+    <h5 class="mb-0 fw-semibold">📚 Notes Portal</h5>
+
 </div>
 
+    <!-- Right -->
+    <div class="d-flex align-items-center gap-3">
+
+        <span class="text-muted">📅 {{ date('d M Y') }}</span>
+
+        <div class="user-box">
+            <div class="avatar">
+                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+            </div>
+
+            <div>
+                <strong>{{ auth()->user()->name }}</strong><br>
+                <small class="text-muted">User Panel</small>
+            </div>
+        </div>
+
+    </div>
+
 </div>
+
+
+{{-- ================================================================= --}}
 
 <!-- CONTENT -->
 <div class="content">
@@ -54,10 +86,22 @@ NOTEPORTAL <span>CMS</span>
 <!-- FOOTER -->
 <div class="footer">
 © 2026 NotePortal CMS | Notes Sharing System
-</div>
-
-</body>
+</div>    
 
 <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
+
+<script>
+            document.getElementById("menu-toggle").addEventListener("click",function(){
+                document.body.classList.toggle("sidebar-collapsed");
+            });
+
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+    </script>
+
+</body>
 
 </html>
