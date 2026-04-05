@@ -19,13 +19,15 @@ class AuthController extends Controller
     }
 
     public function adminDashboard(){
+        $totalNotes = Notes::get()->count();
         $totalSubjects = Subject::get()->count();
         $totalCategory = Category::get()->count();
-        return view("admin.dashboard", compact("totalSubjects","totalCategory"));
+        $totalUser = User::where("role","User")->count();
+        return view("admin.dashboard", compact("totalSubjects","totalCategory","totalUser","totalNotes"));
     }
 
     public function userDashboard(){
-        $publicNotesCount = Notes::where("visibility","Public")->get()->count();
+        $publicNotesCount = Notes::where("visibility","Public")->where("user_id",FacadesAuth::user()->id)->get()->count();
         $privateNotesCount = Notes::where("visibility","Private")->get()->count();
         $totalNotes = Notes::where("user_id",FacadesAuth::user()->id)->get()->count();
         return view("user.dashboard", compact("privateNotesCount","publicNotesCount","totalNotes"));

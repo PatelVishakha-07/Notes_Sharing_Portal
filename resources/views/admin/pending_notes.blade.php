@@ -2,36 +2,74 @@
 
 @section('content')
 
-<table>
-    <tr>
-        <th>Notes ID</th>
-        <th>User Name</th>
-        <th>Category Name</th>
-        <th>Subject Name</th>
-        <th>File</th>
-        <th>Action</th>
-    </tr>
-    <tr>
+<div class="card p-4">
+
+    <div class="mb-3">
+        <h4>Pending Notes</h4>
+        <p class="text-muted">Approve or reject uploaded notes</p>
+    </div>
+
+    <table class="table table-hover align-middle">
+
+        <thead class="table-light">
+            <tr>
+                <th>Notes ID</th>
+                <th>User</th>
+                <th>Category</th>
+                <th>Subject</th>
+                <th>Files</th>
+                <th width="180">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
         @foreach ($pending_notes as $pn)
-            <td>{{$pn->id}}</td>
-            <td>{{$pn->user->name}}</td>
-            <td>{{$pn->category->cat_name}}</td>
-            <td>{{$pn->subject->sub_name}}</td>
 
-            @foreach ($pn->filePath as $fp)
-                <td> <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="btn btn-sm btn-primary"> Open PDF </a> </td>
-            @endforeach
+            <tr>
 
-            <td>
-                <from method="get" action="{{url('')}}">  {{-- AdminController --}}
-                    <button type="submit">Approved</button> 
-                </from> /
-                <from method="get" action="{{url('')}}">  {{-- AdminController --}}
-                    <button type="submit">Reject</button> 
-                </from>
-            </td>
+                <td>{{$pn->id}}</td>
+
+                <td>{{$pn->user->name}}</td>
+
+                <td>{{$pn->category->cat_name}}</td>
+
+                <td>{{$pn->subject->sub_name}}</td>
+
+                <td>
+                    @foreach ($pn->filePath as $fp)
+
+                        <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="btn btn-sm btn-primary">
+                            View PDF
+                        </a>
+
+                    @endforeach
+                </td>
+
+                <td class="d-flex gap-2">
+
+                    <form method="GET" action="{{url('admin/acceptRequest/1/'.$pn->id)}}">
+                        <button type="submit" class="btn btn-success btn-sm">
+                            Approve
+                        </button>
+                    </form>
+
+                    <form method="GET" action="{{url('admin/acceptRequest/0/'.$pn->id)}}">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Reject
+                        </button>
+                    </form>
+
+                </td>
+
+            </tr>
+
         @endforeach
-    </tr>
-</table>
-    
+
+        </tbody>
+
+    </table>
+
+</div>
+
 @endsection

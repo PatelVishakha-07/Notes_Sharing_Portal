@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotesController;
@@ -19,7 +21,8 @@ Route::prefix("user")->group(function(){
     Route::get("/upload_notes",[NotesController::class,"uploadNotePage"]);
     Route::post("/save_notes",[NotesController::class,"saveNote"]);
     Route::get("/getSubjects/{cat_id}",[NotesController::class,"getSubjects"]);
-    Route::get("/list_notes",[NotesController::class,"listNotes"]);
+    Route::get("/list_private_notes/{status}",[NotesController::class,"listNotes"]);
+    Route::get("/list_public_notes/{status}",[NotesController::class,"listNotes"]);
     Route::get("/delete_notes/{id}",[NotesController::class,"deleteNote"]);
 });
 
@@ -50,6 +53,11 @@ Route::middleware(["isAdmin"])->group(function(){
     Route::get("edit_subject_page/{id}",[SubjectController::class,"editSubjectPage"]);
     Route::post("edit_subject",[SubjectController::class,"editSubject"]);
     Route::get("delete_subject/{id}",[SubjectController::class,"deleteSubject"]);
+
+    Route::get("admin/acceptRequest/{val}/{id}",[AdminController::class,"acceptRequest"]);
+    Route::get("admin/showPendingNotesList",[AdminController::class, "showPendingNotesList"]);
+
+    Route::get("admin/showUsersList",[AdminController::class, "showUserList"]);
 
 });
 

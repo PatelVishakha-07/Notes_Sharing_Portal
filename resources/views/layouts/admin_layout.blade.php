@@ -20,15 +20,15 @@
 NOTEPORTAL <span>CMS</span>
 </div>
 
-<a href="admin_dashboard" class="{{ request()->is('admin_dashboard') ? 'active' : '' }}">Dashboard</a>
+<a href="{{url('admin_dashboard')}}" class="{{ request()->is('admin_dashboard') ? 'active' : '' }}">Dashboard</a>
 
-<a href="list_category" class="{{ request()->is('list_category') ? 'active' : '' }}">Category</a>
+<a href="{{url('list_category')}}" class="{{ request()->is('list_category') ? 'active' : '' }}">Category</a>
 
-<a href="list_subject" class="{{ request()->is('list_subject') ? 'active' : '' }}">Subjects</a>
+<a href="{{url('list_subject')}}" class="{{ request()->is('list_subject') ? 'active' : '' }}">Subjects</a>
 
-<a href="/admin/pending_notes" class="{{ request()->is('admin/pending_notes') ? 'active' : '' }}">Pending Notes</a>
+<a href="{{url('admin/showPendingNotesList')}}" class="{{ request()->is('admin/showPendingNotesList') ? 'active' : '' }}">Pending Notes</a>
 
-<a href="/admin/users" class="{{ request()->is('admin/users') ? 'active' : '' }}">Users</a>
+<a href="{{url('admin/showUsersList')}}" class="{{ request()->is('admin/showUsersList') ? 'active' : '' }}">Users</a>
 
 <a href="{{url('logout')}}" style="color:#fb7185;">Logout</a>
 

@@ -9,14 +9,14 @@
     <div class="col-md-3">
         <div class="dashboard-card">
             <p>Total Users</p>
-            <h4>10</h4>
+            <h4>{{$totalUser}}</h4>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="dashboard-card">
             <p>Total Notes</p>
-            <h4>10</h4>
+            <h4>{{$totalNotes}}</h4>
         </div>
     </div>
 

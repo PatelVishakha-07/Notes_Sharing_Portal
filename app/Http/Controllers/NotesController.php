@@ -8,7 +8,8 @@ use App\Models\Notes;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use League\Flysystem\Visibility;
+use Illuminate\Support\Str;
+
 
 class NotesController extends Controller
 {
@@ -27,6 +28,8 @@ class NotesController extends Controller
 
         // echo "<pre>";
         // print_r($request->all());die;
+        $code = null;
+        $visibility = "Public";       
 
         $request->validate([
             "title"=>"required",
@@ -35,7 +38,10 @@ class NotesController extends Controller
             "file"=>"required"
         ]);
 
-        $visibility = $request->visibility ? $request->visibility : "Public";
+        if($request->has("is_private")){
+            $visibility = "Private";
+            $code = strtoupper(Str::random(3))."-".strtoupper(Str::random(3));
+        }
 
 
         $notes = Notes::create([
@@ -43,7 +49,8 @@ class NotesController extends Controller
             "cat_id"=>$request->cat_id,
             "sub_id"=>$request->sub_id,
             "visibility" => $visibility,
-            "user_id"=>Auth::id()
+            "user_id"=>Auth::id(),
+            "access_code"=>$code
         ]);
 
         foreach($request->file("file") as $f){
@@ -56,17 +63,26 @@ class NotesController extends Controller
             ]);            
         }
 
-        return redirect("user/list_notes");
+        if($request->has("is_private")){
+            return back()->with("access_code",$code);
+        }
+
+        return redirect("user/list_public_notes/Public");
     }
 
-    public function listNotes(){
+    public function listNotes($status){
         $user_id = Auth::id();
-        $notes = Notes::with("subject","category","filePath","user")->where("user_id",$user_id)->get();
-        return view("user.list", compact("notes"));
+        
+        if($status == "Public"){
+            $notes = Notes::with("subject","category","filePath","user")->where("user_id",$user_id)->where("visibility","Public")->get();
+        }else{
+            $notes = Notes::with("subject","category","filePath","user")->where("user_id",$user_id)->where("visibility","Private")->get();
+        }
+        return view("user.list", compact("notes","status"));
     }
 
     public function deleteNote($id){
         Notes::where("id",$id)->delete();
-        return redirect("user/list_notes");
+        return redirect("user/list_public_notes/Public");
     }
 }

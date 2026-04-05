@@ -22,6 +22,9 @@
                         <th>Title</th>
                         <th>Category</th>
                         <th>Subject</th>
+                         @if($status == "Private")
+                            <th>Access Code</th>
+                        @endif
                         <th>Notes File</th>
                         <th width="150">Action</th>
                     </tr>
@@ -47,13 +50,35 @@
                                 </span>
                             </td>
 
+                            @if($status == "Private")
+                                <td>
+                                    <span class="badge bg-dark">
+                                        {{$n->access_code}}
+                                    </span>
+                                    <button class="btn btn-sm btn-outline-secondary ms-2"
+                                        onclick="copyCode('{{$n->access_code}}')">
+                                        Copy
+                                    </button>
+                                </td>
+                            @endif
+
                             <td>
                                 @foreach ($n->filePath as $fp)
+
+                                    {{-- View PDF --}}
                                     <a href="{{ asset('storage/'.$fp->file_path) }}"
-                                       target="_blank"
-                                       class="btn btn-sm btn-outline-primary mb-1">
-                                        📄 View PDF
+                                    target="_blank"
+                                    class="btn btn-sm btn-outline-primary mb-1">
+                                    📄 View
                                     </a>
+
+                                    {{-- Download PDF --}}
+                                    <a href="{{ asset('storage/'.$fp->file_path) }}"
+                                    download
+                                    class="btn btn-sm btn-outline-success mb-1">
+                                    ⬇ Download
+                                    </a>
+
                                 @endforeach
                             </td>
 
@@ -80,5 +105,13 @@
     </div>
 
 </div>
+<script>
+    function copyCode(code){
+        navigator.clipboard.writeText(code);
+        alert("Access code copied!");
+    }
+</script>
+
+
 
 @endsection

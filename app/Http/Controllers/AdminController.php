@@ -6,11 +6,11 @@ use App\Models\Notes;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AdminUserController extends Controller
+class AdminController extends Controller
 {
     public function showUserList(){
-        $totalUser = User::where("role","User")->count();
-        return view("admin.list_user", compact("totalUser"));
+        $user = User::where("role","User")->get();
+        return view("admin.list_user", compact("user"));
     }
 
     public function showPendingNotesList(){
@@ -18,7 +18,15 @@ class AdminUserController extends Controller
         return view("admin.pending_notes", compact("pending_notes"));
     }
 
-    public function acceptRequest(){
-        
+    public function acceptRequest($val, $id){
+        if($val == 1){
+            $notes = Notes::find($id);
+            $notes->status = 'Approved';
+            $notes->save();
+        }
+        else if($val==0){
+
+        }
+        return redirect("admin/showPendingNotesList");
     }
 }
