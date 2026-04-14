@@ -31,7 +31,7 @@
                     {{ $note->title }}
                 </div>
 
-                <!-- ⭐ FAVORITE BUTTON -->
+                <!-- FAVORITE BUTTON -->
                 <button
                     onclick="toggleFav({{ $note->id }}, this)"
                     class="{{ $note->is_favorite ? 'fav-active' : '' }}"
@@ -41,7 +41,7 @@
 
             </div>
 
-            <!-- PREVIEW -->
+            <!-- preview of notes -->
             <div style="height:140px; background:#f1f5f9; border-radius:10px;
                 overflow:hidden; display:flex; align-items:center; justify-content:center; ">
 
@@ -56,7 +56,7 @@
 
             </div>
 
-            <!-- INFO -->
+            <!-- user name and subject name -->
             <div style="padding:6px 4px;">
 
                 <div style="font-size:11px; color:#64748b;">
@@ -69,7 +69,7 @@
 
             </div>
 
-            <!-- BUTTONS -->
+            <!-- Buttons to download or view notes -->
             <div style="display:flex; gap:6px; padding:0 4px 6px; ">
 
                 @if(isset($note->filePath[0]))
@@ -85,9 +85,29 @@
                             text-align:center; text-decoration:none; background:#16a34a; color:white; display:inline-block; ">
                         Download </a>
 
-                @endif
+                @endif                
 
             </div>
+
+            @if(count($note->youtubeLink) > 0)
+
+                    <div style="padding:0 4px 6px;">
+
+                        @foreach($note->youtubeLink as $index  => $link)
+
+                            <a href="{{ $link->youtube_link }}" 
+                            target="_blank"
+                            style="display:block; font-size:11px; color:#2563eb; text-decoration:none; margin-bottom:2px;">
+
+                                🎥 Watch Video {{ $index + 1 }}
+
+                            </a>
+
+                        @endforeach
+
+                    </div>
+
+                @endif
 
         </div>
 
@@ -95,6 +115,8 @@
 
 </div>
 
+
+{{-- code for add to favourite --}}
 <script>
     function toggleFav(noteId, btn){
         $.ajax({

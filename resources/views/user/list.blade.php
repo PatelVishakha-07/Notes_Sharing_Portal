@@ -26,7 +26,6 @@
                             <th>Access Code</th>
                         @endif
                         <th>Notes File</th>
-                        <th>Notes</th>
                         <th width="150">Action</th>
                     </tr>
                 </thead>
@@ -78,7 +77,7 @@
                                     download
                                     class="btn btn-sm btn-outline-success mb-1">
                                     ⬇ Download
-                                    </a>
+                                    </a><br>
 
                                 @endforeach
                             </td>
