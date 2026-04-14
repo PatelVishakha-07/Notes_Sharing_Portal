@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\FilePath;
 use App\Models\Notes;
 use App\Models\Subject;
+use App\Models\Youtube;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -63,6 +64,15 @@ class NotesController extends Controller
             ]);            
         }
 
+        if($request->youtube_links){
+            foreach($request->youtube_links as $link){
+                Youtube::create([
+                    "notes_id"=>$notes->id,
+                    "youtube_link"=>$link
+                ]);
+            }
+        }
+
         if($request->has("is_private")){
             return back()->with("access_code",$code);
         }
@@ -74,9 +84,9 @@ class NotesController extends Controller
         $user_id = Auth::id();
         
         if($status == "Public"){
-            $notes = Notes::with("subject","category","filePath","user")->where("user_id",$user_id)->where("visibility","Public")->get();
+            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)->where("visibility","Public")->get();
         }else{
-            $notes = Notes::with("subject","category","filePath","user")->where("user_id",$user_id)->where("visibility","Private")->get();
+            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)->where("visibility","Private")->get();
         }
         return view("user.list", compact("notes","status"));
     }
@@ -96,7 +106,7 @@ class NotesController extends Controller
        
         $category = Category::get();
         $subject = Subject::get();
-        $notes = Notes::with("category","subject","filePath")->where("visibility","Public");
+        $notes = Notes::with("category","subject","filePath","youtubeLink")->where("visibility","Public");
 
         if($request->cat_id){
             $notes = $notes->where("cat_id",$request->cat_id);
@@ -114,7 +124,7 @@ class NotesController extends Controller
     public function getPrivateNotes(Request $request){
         $category = Category::get();
         $subject = Subject::get();
-        $notes = Notes::with("category","subject","filePath")->where("access_code",$request->access_code)->get();
+        $notes = Notes::with("category","subject","filePath","youtubeLink")->where("access_code",$request->access_code)->get();
         return view("user.search", compact("category","subject","notes"));
     }
 }

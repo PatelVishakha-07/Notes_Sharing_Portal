@@ -4,8 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 //Logout
@@ -27,6 +29,9 @@ Route::prefix("user")->group(function(){
     Route::get("/show_search_notes",[NotesController::class,"showSearchPage"]);
     Route::post("/search_notes",[NotesController::class,"searchNotes"]);
     Route::post("/access_private_note",[NotesController::class,"getPrivateNotes"]);
+    Route::get("all_notes",[UserController::class,"publicNotesPage"]);
+
+    Route::post("add_to_fav/{id}",[UserController::class, "addToFavourite"]);
 });
 
 
@@ -65,6 +70,17 @@ Route::middleware(["isAdmin"])->group(function(){
 });
 
 
-Route::get('/', function () {
-    return redirect("login");
+Route::get('/', [HomeController::class, "home"]);
+Route::get('home/note/view/{id}', [HomeController::class, "viewHomeNote"])->middleware("auth");
+
+
+Route::get('/view-file/{file}', function ($file) {
+
+    $path = storage_path('app/public/' . $file);
+
+    return response()->file($path, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="'.$file.'"'
+    ]);
 });
+

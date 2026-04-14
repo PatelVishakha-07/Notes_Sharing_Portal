@@ -7,11 +7,13 @@
 <form action="{{ url('user/save_notes') }}" method="POST" enctype="multipart/form-data">
 @csrf
 
+{{-- Title --}}
 <div class="mb-3">
     <label class="mb-1">Title</label>
     <input type="text" name="title" class="form-control" placeholder="enter title">
 </div>
 
+{{-- Category --}}
 <div class="mb-3">
     <label class="mb-1">Category</label>
     <select name="cat_id" class="form-control" id="category">
@@ -22,6 +24,7 @@
     </select>
 </div>
 
+{{-- Subject --}}
 <div class="mb-3">
     <label class="mb-1">Subject</label>
     <select name="sub_id" class="form-control" id="subject" disabled>
@@ -29,14 +32,37 @@
     </select>
 </div>
 
+{{-- pdf / images Upload --}}
 <div class="mb-3">
     <label>Upload File</label>
-    <input type="file" name="file[]" class="form-control" multiple accept="">
+    <input type="file" name="file[]" class="form-control" multiple>
 </div>
 
+{{-- ASK USER --}}
+<div class="mb-3">
+    <input type="checkbox" id="addYT">
+    <label for="addYT">Do you want to add YouTube links?</label>
+</div>
+
+{{-- YOUTUBE SECTION --}}
+<div id="yt-section" style="display:none;">
+    <div class="mb-3">
+        <label class="mb-1">Add YouTube Links</label>
+
+        <div id="yt-container">
+            <div class="d-flex mb-2">
+                <input type="text" name="youtube_links[]" class="form-control" placeholder="Paste YouTube link">
+                <button type="button" class="btn btn-danger ms-2" onclick="removeField(this)">X</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" onclick="addField()">+ Add More</button>
+    </div>
+</div>
+
+{{-- Private/public --}}
 <div class="mb-3">
     <label class="mb-1">Do you want to keep the notes private?</label><br>
-
     <input type="checkbox" name="is_private" value="1" id="private">
     <label for="private">Private</label>
 </div>
@@ -45,8 +71,7 @@
 
 </form>
 
-
-<!-- Access Code Modal -->
+<!-- Modal to display private code-->
 <div class="modal fade" id="codeModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -58,7 +83,6 @@
       <div class="modal-body text-center">
         <p>Share this code with others to access the file</p>
 
-        {{-- <h3 id="codeText">{{ session('access_code') }}</h3> --}}
         <h3 id="codeText" class="text-success fw-bold">{{ session('access_code') }}</h3>
 
         <button class="btn btn-primary mt-2" onclick="copyCode()">Copy Code</button>
@@ -69,11 +93,11 @@
 </div>
 
 
-{{-- JavaScript code --}}
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+    // CATEGORY → SUBJECT
     $('#category').change(function(){
         var cat_id = $(this).val();
 
@@ -82,8 +106,7 @@
                 url: '{{ url("user/getSubjects") }}/' + cat_id,
                 type: 'GET',
                 success: function(data){
-                    $('#subject').empty();
-                    $('#subject').append('<option value="">Select Subject</option>');
+                    $('#subject').empty().append('<option value="">Select Subject</option>');
 
                     data.forEach(function(sub){
                         $('#subject').append(
@@ -93,28 +116,51 @@
                 }
             });
         } else {
-            $('#subject').empty();
-            $('#subject').append('<option value="">Select Subject</option>');
+            $('#subject').empty().append('<option value="">Select Subject</option>');
         }
+
         $('#subject').prop('disabled', false);
     });
 
-    // popup box for access code
+    // TOGGLE YOUTUBE SECTION
+    $('#addYT').change(function(){
+        if($(this).is(':checked')){
+            $('#yt-section').slideDown();
+        } else {
+            $('#yt-section').slideUp();
+        }
+    });
 
+    // ADD FIELD
+    function addField(){
+        $('#yt-container').append(`
+            <div class="d-flex mb-2">
+                <input type="text" name="youtube_links[]" class="form-control" placeholder="Paste YouTube link">
+                <button type="button" class="btn btn-danger ms-2" onclick="removeField(this)">X</button>
+            </div>
+        `);
+    }
+
+    // REMOVE FIELD
+    function removeField(btn){
+        $(btn).parent().remove();
+    }
+
+    // COPY CODE
     function copyCode(){
         let code = document.getElementById("codeText").innerText;
         navigator.clipboard.writeText(code);
         alert("Code copied!");
     }
 
+    // SHOW MODAL
     @if(session('access_code'))
     document.addEventListener("DOMContentLoaded", function() {
         var myModal = new bootstrap.Modal(document.getElementById('codeModal'));
         myModal.show();
     });
-    @endif
+    @endif    
 
 </script>
-
 
 @endsection

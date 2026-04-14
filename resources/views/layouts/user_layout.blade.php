@@ -62,11 +62,11 @@
 
         <div class="user-box">
             <div class="avatar">
-                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }}
             </div>
 
             <div>
-                <strong>{{ auth()->user()->name }}</strong><br>
+                <strong>{{ auth()->user()->name ?? 'Guest' }}</strong><br>
                 <small class="text-muted">User Panel</small>
             </div>
         </div>
