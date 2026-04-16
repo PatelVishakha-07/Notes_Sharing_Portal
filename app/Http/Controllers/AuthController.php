@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Favourite;
 use App\Models\Notes;
 use App\Models\Subject;
 use App\Models\User;
@@ -23,6 +24,7 @@ class AuthController extends Controller
         $totalSubjects = Subject::get()->count();
         $totalCategory = Category::get()->count();
         $totalUser = User::where("role","User")->count();
+
         return view("admin.dashboard", compact("totalSubjects","totalCategory","totalUser","totalNotes","notes"));
     }
 
@@ -32,7 +34,10 @@ class AuthController extends Controller
         $totalNotes = Notes::where("user_id",FacadesAuth::user()->id)->get()->count();
         
         $notes = Notes::with('filePath', 'subject')->where('visibility', 'Public')->get();
-        return view("user.dashboard", compact("privateNotesCount","publicNotesCount","totalNotes","notes"));
+
+        $favouriteCount = Favourite::where("user_id",auth()->id())->get()->count();
+
+        return view("user.dashboard", compact("privateNotesCount","publicNotesCount","totalNotes","notes","favouriteCount"));
     }
 
     public function loginPage(){
@@ -40,11 +45,6 @@ class AuthController extends Controller
     }
 
     public function processLogin(Request $request){
-
-        // echo "<pre>";
-        // print_r($request->all());
-        // print_r(FacadesAuth::user()->role);
-        // die;
 
         $request->validate([
             "email"=>"required",

@@ -28,4 +28,8 @@ class Notes extends Model
     public function youtubeLink(){
         return $this->hasMany(Youtube::class,"notes_id");
     }
+
+    public function favourite(){
+        return $this->hasMany(Favourite::class,"notes_id");
+    }
 }

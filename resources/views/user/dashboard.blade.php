@@ -59,36 +59,50 @@
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
 
-
         <a href="{{url('user/upload_notes')}}"
-           class="btn btn-primary btn-sm"
-           style="padding: 4px 10px; font-size: 13px; border-radius: 8px;">
+        class="btn btn-primary btn-sm"
+        style="padding: 4px 10px; font-size: 13px; border-radius: 8px;">
             + Upload
         </a>
+
     </div>
 
     {{-- ✅ DASHBOARD CARDS --}}
     <div class="row mb-4">
 
-        <div class="col-12 col-md-4 mb-3">
+        <div class="col-12 col-md-6 col-lg-3 mb-3">
             <div class="dashboard-card">
                 <div class="card-title">📒 Total Notes</div>
                 <div class="card-number purple">{{ $totalNotes }}</div>
             </div>
         </div>
 
-        <div class="col-12 col-md-4 mb-3">
+        <div class="col-12 col-md-6 col-lg-3 mb-3">
             <div class="dashboard-card">
                 <div class="card-title">🌐 Public Notes</div>
                 <div class="card-number green">{{ $publicNotesCount }}</div>
             </div>
         </div>
 
-        <div class="col-12 col-md-4 mb-3">
+        <div class="col-12 col-md-6 col-lg-3 mb-3">
             <div class="dashboard-card">
                 <div class="card-title">🔒 Private Notes</div>
                 <div class="card-number orange">{{ $privateNotesCount }}</div>
             </div>
+        </div>  
+        
+        <div class="col-12 col-md-6 col-lg-3 mb-3">
+            <a href="{{ url('user/fav_list') }}" class="text-decoration-none">
+                <div class="dashboard-card favorite-card">
+
+                    <div class="card-title">❤️ Favorite Notes</div>
+
+                    <div class="card-number red">
+                        {{ $favouriteCount ?? 0 }}
+                    </div>
+
+                </div>
+            </a>
         </div>
 
     </div>

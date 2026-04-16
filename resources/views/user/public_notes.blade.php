@@ -2,7 +2,8 @@
 
 @section('content')
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+<link href="{{ asset('jquery-3.6.0.min.js') }}" rel="stylesheet">
 
 <!-- HEADER -->
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
@@ -34,7 +35,7 @@
                 <!-- FAVORITE BUTTON -->
                 <button
                     onclick="toggleFav({{ $note->id }}, this)"
-                    class="{{ $note->is_favorite ? 'fav-active' : '' }}"
+                    class="{{ $note->is_favourite ? 'fav-active' : '' }}"
                     style="background:none; border:none; cursor:pointer; font-size:16px;">
                     {{ $note->is_favorite ? '★' : '☆' }}
                 </button>

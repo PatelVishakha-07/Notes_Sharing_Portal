@@ -4,7 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
 <script src="https://cdn.tailwindcss.com"></script>
+{{-- <link href="{{ asset('css/tailwind.css') }}" rel="stylesheet"> --}}
+
+{{-- <link href="{{ asset('css/css2.css') }}" rel="stylesheet"> --}}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -39,14 +43,14 @@ Access notes, share knowledge, and collaborate with students.
     <form action="{{url('process_login')}}" method="POST" class="space-y-4">
     @csrf
     
-    <label class="text-sm text-black-600">Email</label>
+    <label class="text-sm text-gray-600">Email</label>
     <input type="email" name="email" class="input-field" placeholder="Email">
 
     @error('email')
     <p class="alert-error">{{ $message }}</p>
     @enderror
 
-    <label class="text-sm text-black-600">Password</label>
+    <label class="text-sm text-gray-600">Password</label>
     <input type="password" name="password" class="input-field" placeholder="Password">
 
     @error('password')

@@ -32,6 +32,8 @@ Route::prefix("user")->group(function(){
     Route::get("all_notes",[UserController::class,"publicNotesPage"]);
 
     Route::post("add_to_fav/{id}",[UserController::class, "addToFavourite"]);
+
+    Route::get("fav_list",[UserController::class, "favouriteList"]);
 });
 
 

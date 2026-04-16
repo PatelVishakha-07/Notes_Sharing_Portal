@@ -60,15 +60,19 @@
 
         <span class="text-muted">📅 {{ date('d M Y') }}</span>
 
-        <div class="user-box">
+        <div class="user-box d-flex align-items-center gap-2">
+
+        <!-- Avatar (Initial) -->
             <div class="avatar">
                 {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }}
             </div>
 
-            <div>
+            <!-- Name + Role -->
+            <div class="user-info">
                 <strong>{{ auth()->user()->name ?? 'Guest' }}</strong><br>
                 <small class="text-muted">User Panel</small>
             </div>
+
         </div>
 
     </div>
