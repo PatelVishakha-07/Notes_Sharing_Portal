@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\FilePath;
 use App\Models\Notes;
 use App\Models\Subject;
+use App\Models\User;
 use App\Models\Youtube;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -117,6 +118,12 @@ class NotesController extends Controller
         if($request->title){
             $notes = $notes->where("title","like","%".$request->title."%");
         }
+
+        if($request->username){
+            $userId = User::where('name', 'like', '%' . $request->username . '%')->first();
+            $notes = $notes->where("user_id",$userId->id);
+        }
+
         $notes = $notes->get();
         return view("user.search", compact("category","subject","notes"));
     }
