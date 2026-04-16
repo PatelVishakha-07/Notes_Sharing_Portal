@@ -407,3 +407,166 @@ select.form-control:focus {
 .browse-btn:hover {
     background:#7e22ce;
 }
+
+/* ================= SEARCH NOTES (FINAL FIX) ================= */
+
+.search-notes-form .row {
+    align-items: flex-end;
+    gap: 12px 0;
+}
+
+/* LABEL */
+.search-notes-form label {
+    font-size: 11.5px;
+}
+
+/* INPUT + SELECT */
+.search-notes-form .form-control {
+     height: 32px;
+    padding: 3px 8px;
+    font-size: 12px;
+}
+
+/* FOCUS EFFECT */
+.search-notes-form .form-control:focus {
+    background: #ffffff;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+}
+
+/* SELECT FIX */
+.search-notes-form select.form-control {
+    height: 34px;
+    padding-right: 28px;
+}
+
+/* BUTTON (MAIN FIX) */
+.search-notes-form .btn-primary {
+    height: 32px;
+    font-size: 12px;
+}
+
+/* BUTTON HOVER */
+.search-notes-form .btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+}
+
+/* REMOVE EXTRA SPACE */
+.search-notes-form .mb-3 {
+    margin-bottom: 8px !important;
+}
+
+.card-body {
+    background: #f8fafc;
+}
+
+.search-notes-form select,
+.search-notes-form input {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.badge-soft-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+.badge-soft-info {
+    background-color: #cff4fc;
+    color: #055160;
+}
+.badge-soft-secondary {
+    background-color: #e2e3e5;
+    color: #41464b;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.admin-table {
+    font-size: 13px;
+}
+
+.admin-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-table td {
+    vertical-align: middle;
+}
+
+.clean-table {
+    background: #fff;
+    color: #334155; /* soft dark gray instead of black */
+}
+
+.clean-table th {
+    color: #475569;
+    font-weight: 600;
+    background: #f8fafc;
+}
+
+.clean-table td {
+    color: #334155;
+}
+
+.clean-table tbody tr:hover {
+    background: #f1f5f9;
+}
+
+
+.search-pill {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    padding: 6px 10px;
+    gap: 8px;
+    width: 100%;
+    max-width: 750px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    background: transparent;
+}
+
+.filter-select {
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    outline: none;
+    color: #334155;
+    cursor: pointer;
+}
+
+.search-btn {
+    background: linear-gradient(90deg, #6366f1, #7c3aed);
+    border: none;
+    color: white;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.clear-btn {
+    font-size: 14px;
+    color: #94a3b8;
+    text-decoration: none;
+}
+
+.clear-btn:hover {
+    color: #ef4444;
+}

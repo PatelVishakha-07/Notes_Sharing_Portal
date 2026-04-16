@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Notes;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function showUserList(){
-        $user = User::where("role","User")->get();
-        return view("admin.list_user", compact("user"));
+    public function showUserList(Request $request){
+        $users = User::where("role","User")->withCount('notes');
+
+        if($request->search){
+            $users->where(function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $users = $users->paginate(10);
+
+        return view("admin.list_user", compact("users"));
     }
 
     public function showPendingNotesList(){

@@ -18,14 +18,25 @@ class AuthController extends Controller
         return redirect("login");
     }
 
-    public function adminDashboard(){
-        $notes = Notes::where("visibility","Public")->get();
+    public function adminDashboard(Request $request){
+
+        $category = Category::get();
+        $subject = Subject::get();
         $totalNotes = Notes::get()->count();
         $totalSubjects = Subject::get()->count();
         $totalCategory = Category::get()->count();
         $totalUser = User::where("role","User")->count();
 
-        return view("admin.dashboard", compact("totalSubjects","totalCategory","totalUser","totalNotes","notes"));
+
+        $notes = Notes::with("category","user","subject","filePath");
+
+        if($request->search){
+            $notes->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $notes = $notes->orderBy('id', 'desc')->paginate(10);
+
+        return view('admin.dashboard', compact("notes","totalCategory", "totalNotes", 'totalSubjects', "totalUser", "category","subject"));
     }
 
     public function userDashboard(){

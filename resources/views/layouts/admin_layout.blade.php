@@ -55,24 +55,25 @@
 
 </div>
 
-    <!-- Right -->
-    <div class="d-flex align-items-center gap-3">
+  <!-- Right -->
+    <div class="d-flex align-items-center gap-4">
 
-        <span class="text-muted">📅 {{ date('d M Y') }}</span>
+        <!-- Date -->
+        <span class="text-muted">
+            📅 {{ date('d M Y') }}
+        </span>
 
-        <div class="user-box">
-            <div class="avatar">
-                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-            </div>
+        <!-- Admin -->
+        <div class="d-flex align-items-center gap-2">
 
-            <div>
-                <strong>{{ auth()->user()->name }}</strong><br>
-                <small class="text-muted">User Panel</small>
+            <div class="avatar"> {{ strtoupper(substr(auth()->user()->name,0,1)) }} </div>
+
+            <div class="user-info text-start">
+                <strong class="d-block lh-1"> {{ auth()->user()->name }} </strong>
+                <small class="text-muted"> Admin Panel </small>
             </div>
         </div>
-
     </div>
-
 </div>
 
 

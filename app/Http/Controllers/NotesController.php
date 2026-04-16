@@ -120,8 +120,8 @@ class NotesController extends Controller
         }
 
         if($request->username){
-            $userId = User::where('name', 'like', '%' . $request->username . '%')->first();
-            $notes = $notes->where("user_id",$userId->id);
+            $userId = User::where('name', 'like', '%' . $request->username . '%')->pluck("id");
+            $notes = $notes->whereIn("user_id",$userId);
         }
 
         $notes = $notes->get();
