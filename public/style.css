@@ -671,3 +671,29 @@ select.form-control:focus {
         width: 100%;
     }
 }
+
+/* Pagination Style */
+
+.pagination {
+    font-size: 12px !important;
+}
+
+.pagination .page-link {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+}
+
+.pagination svg {
+    width: 14px !important;
+    height: 14px !important;
+}
+.watch-btn {
+    background: #ef4444;
+    font-size: 11px;
+    padding: 4px 8px;
+}
+
+.watch-btn:hover {
+    background: #dc2626;
+}

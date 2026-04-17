@@ -69,6 +69,8 @@ Route::middleware(["isAdmin"])->group(function(){
     Route::get("admin/acceptRequest/{val}/{id}",[AdminController::class,"acceptRequest"]);
     Route::get("admin/showPendingNotesList",[AdminController::class, "showPendingNotesList"]);
 
+    Route::get('admin/toggle-user-status/{id}', [AdminController::class, 'toggleUserStatus']);
+
     Route::get("admin/showUsersList",[AdminController::class, "showUserList"]);
 
 });

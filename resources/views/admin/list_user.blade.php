@@ -56,9 +56,17 @@
 
                         <td>
                             @if($user->status == 1)
-                                <span class="text-success fw-semibold">Active</span>
+                                <a href="{{ url('admin/toggle-user-status/'.$user->id) }}"
+                                class="btn btn-sm btn-success"
+                                onclick="return confirm('Are you sure you want to deactivate this user?')">
+                                    Active
+                                </a>
                             @else
-                                <span class="text-danger fw-semibold">Inactive</span>
+                                <a href="{{ url('admin/toggle-user-status/'.$user->id) }}"
+                                class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure you want to activate this user?')">
+                                    Inactive
+                                </a>
                             @endif
                         </td>
 

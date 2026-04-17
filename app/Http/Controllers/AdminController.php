@@ -46,4 +46,14 @@ class AdminController extends Controller
         }
         return redirect("admin/showPendingNotesList");
     }
+
+
+    public function toggleUserStatus($id){
+        $user = User::find($id);
+
+        $user->status = $user->status == 1 ? 2 : 1;
+        $user->save();
+
+        return redirect()->back()->with('success', 'User status updated successfully');
+    }
 }

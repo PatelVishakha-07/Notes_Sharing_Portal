@@ -29,7 +29,7 @@ class NotesController extends Controller
     public function saveNote(Request $request){
 
         // echo "<pre>";
-        // print_r($request->all());die;
+        // print_r($request->all());die;        
         $code = null;
         $visibility = "Public";       
 
@@ -39,6 +39,14 @@ class NotesController extends Controller
             "sub_id"=>"required",
             "file"=>"required"
         ]);
+
+        $user = auth()->user();
+
+        // 🚫 Block inactive users
+        if ($user->status != 1) {
+            return redirect()->back()->with('error', 'Your account is deactivated. You cannot upload notes. Please Contact the Admin');
+        }
+
 
         if($request->has("is_private")){
             $visibility = "Private";
