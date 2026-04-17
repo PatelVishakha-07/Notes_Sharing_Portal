@@ -40,10 +40,10 @@ class AuthController extends Controller
 
         if($request->subject){
             $notes->where('sub_id', $request->subject);
-        }
+        }        
 
         $notes = $notes->orderBy('id', 'desc')->paginate(10);
-
+        
         return view('admin.dashboard', compact("notes","totalCategory", "totalNotes", 'totalSubjects', "totalUser", "category","subject"));
     }
 
@@ -55,6 +55,11 @@ class AuthController extends Controller
         $notes = Notes::with('filePath', 'subject')->where('visibility', 'Public')->where("status","Approved")->get();
 
         $favouriteCount = Favourite::where("user_id",auth()->id())->get()->count();
+
+        foreach($notes as $n){
+            $n->is_favourite = Favourite::where("user_id", auth()->id())->where("notes_id", $n->id)->exists();
+        }
+
 
         return view("user.dashboard", compact("privateNotesCount","publicNotesCount","totalNotes","notes","favouriteCount"));
     }

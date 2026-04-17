@@ -126,11 +126,19 @@
     <div class="row">
         @foreach ($notes as $n)
         <div class="col-6 col-md-4 col-lg-3 mb-4">
-            <div class="note-grid-card">
+            <div class="note-grid-card position-relative"> 
                 
+                {{-- ⭐ FAVORITE BUTTON --}}
+                   <button
+                        onclick="toggleFav({{ $n->id }}, this)"
+                        class="favorite-btn {{ $n->is_favourite ? 'fav-active' : '' }}"
+                        style="background:none; border:none; cursor:pointer; font-size:16px;">
+                        {{ $n->is_favourite ? '★' : '☆' }}
+                    </button>
+                                
                 {{-- PREVIEW CONTAINER LOGIC --}}
-                <div class="preview-container">
-                    @if(count($n->filePath) > 0)
+                <div class="preview-container">                
+                   @if(count($n->filePath) > 0)
                         <div class="text-center">
                             <div class="preview-icon">📄</div>
                             <small class="text-muted fw-bold">PDF NOTE</small>
@@ -203,5 +211,31 @@
         @endforeach
     </div>
 </div>
+
+{{-- code for add to favourite --}}
+<script>
+    function toggleFav(noteId, btn){
+        $.ajax({
+            url:"/user/add_to_fav/" + noteId,
+            type:"POST",
+            data: {
+                _token: "{{csrf_token()}}"
+            },
+            success: function(data){
+                if(data.status === "added"){
+                    $(btn).html('★');
+                    $(btn).addClass("fav-active");
+                }else{
+                    $(btn).html('☆');
+                    $(btn).removeClass("fav-active");
+                }
+            },
+            error: function(){
+                alert("Something went wrong!");
+            }
+        });
+    }
+</script>
+
 
 @endsection

@@ -47,7 +47,7 @@
                         --}}
                         @foreach ($n->filePath ?? [] as $fp)
                             @if($loop->first) 
-                                <iframe src="{{ asset('storage/'.$fp->file_path) }}#toolbar=0"></iframe>
+                                <iframe src="{{ url('view-file/'.$fp->file_path) }}#toolbar=0&page=1&view=FitH"></iframe>
                             @endif
                         @endforeach
 
