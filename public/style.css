@@ -570,3 +570,17 @@ select.form-control:focus {
 .clear-btn:hover {
     color: #ef4444;
 }
+
+.btn-edit, .btn-delete {
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.browse-btn {
+    gap: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+}

@@ -22,13 +22,13 @@ class AuthController extends Controller
 
         $category = Category::get();
         $subject = Subject::get();
-        $totalNotes = Notes::get()->count();
+        $totalNotes = Notes::where("status","Approved")->get()->count();
         $totalSubjects = Subject::get()->count();
         $totalCategory = Category::get()->count();
         $totalUser = User::where("role","User")->count();
 
 
-        $notes = Notes::with("category","user","subject","filePath");
+        $notes = Notes::with("category","user","subject","filePath")->where("status","Approved");
 
         if($request->search){
             $notes->where('title', 'like', '%' . $request->search . '%');
@@ -44,7 +44,7 @@ class AuthController extends Controller
         $privateNotesCount = Notes::where("visibility","Private")->where("user_id",FacadesAuth::user()->id)->get()->count();
         $totalNotes = Notes::where("user_id",FacadesAuth::user()->id)->get()->count();
         
-        $notes = Notes::with('filePath', 'subject')->where('visibility', 'Public')->get();
+        $notes = Notes::with('filePath', 'subject')->where('visibility', 'Public')->where("status","Approved")->get();
 
         $favouriteCount = Favourite::where("user_id",auth()->id())->get()->count();
 

@@ -11,7 +11,10 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function showUserList(Request $request){
-        $users = User::where("role","User")->withCount('notes');
+        //$users = User::where("role","User")->withCount('notes');
+        $users = User::where("role","User")
+        ->withCount(['notes','notes as approved_notes_count' => function($q){ $q->where('status', 1); }]);
+
 
         if($request->search){
             $users->where(function ($q) use ($request) {

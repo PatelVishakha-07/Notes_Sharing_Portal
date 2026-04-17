@@ -85,9 +85,11 @@ class NotesController extends Controller
         $user_id = Auth::id();
         
         if($status == "Public"){
-            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)->where("visibility","Public")->get();
+            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)
+            ->where("visibility","Public")->where("status","Approved")->get();
         }else{
-            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)->where("visibility","Private")->get();
+            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)
+            ->where("visibility","Private")->where("status","Approved")->get();
         }
         return view("user.list", compact("notes","status"));
     }
@@ -107,7 +109,7 @@ class NotesController extends Controller
        
         $category = Category::get();
         $subject = Subject::get();
-        $notes = Notes::with("category","subject","filePath","youtubeLink")->where("visibility","Public");
+        $notes = Notes::with("category","subject","filePath","youtubeLink")->where("visibility","Public")->where("status","Approved");
 
         if($request->cat_id){
             $notes = $notes->where("cat_id",$request->cat_id);
@@ -131,7 +133,8 @@ class NotesController extends Controller
     public function getPrivateNotes(Request $request){
         $category = Category::get();
         $subject = Subject::get();
-        $notes = Notes::with("category","subject","filePath","youtubeLink")->where("access_code",$request->access_code)->get();
+        $notes = Notes::with("category","subject","filePath","youtubeLink")->where("access_code",$request->access_code)
+        ->where("status","Approved")->get();
         return view("user.search", compact("category","subject","notes"));
     }
 }

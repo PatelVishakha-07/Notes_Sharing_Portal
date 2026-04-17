@@ -63,7 +63,7 @@
                         </td>
 
                         <td class="text-dark">
-                            {{ $user->notes_count ?? 0 }}
+                            {{ $user->approved_notes_count ?? 0 }}
                         </td>
 
                     </tr>

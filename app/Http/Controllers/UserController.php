@@ -11,7 +11,7 @@ class UserController extends Controller
 
     //function to view public notes page
     public function publicNotesPage(){
-        $notes = Notes::with("filePath","category","subject","user")->where("visibility","Public")->get();
+        $notes = Notes::with("filePath","category","subject","user")->where("visibility","Public")->where("status","Approved")->get();
 
         foreach($notes as $n){
             $n->is_favourite = Favourite::where("user_id", auth()->id())->where("notes_id", $n->id)->exists();
