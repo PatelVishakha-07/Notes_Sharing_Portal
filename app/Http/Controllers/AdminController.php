@@ -40,7 +40,9 @@ class AdminController extends Controller
             $notes->save();
         }
         else if($val==0){
-
+            $notes = Notes::find($id);
+            $notes->status = 'Rejected';
+            $notes->save();
         }
         return redirect("admin/showPendingNotesList");
     }
