@@ -42,7 +42,8 @@
                         Edit
                     </a>
 
-                    <a href="{{url('delete_subject',$s->id)}}" class="btn-delete">
+                    <a href="{{url('delete_subject',$s->id)}}" class="btn-delete"
+                        onclick="return confirm('Are you sure you want to delete this subject?')">
                         Delete
                     </a>
 

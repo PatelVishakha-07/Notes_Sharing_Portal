@@ -4,6 +4,16 @@
 
 <h3>Upload Note</h3><br>
 
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul style="margin:0; padding-left:18px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <form action="{{ url('user/save_notes') }}" method="POST" enctype="multipart/form-data">
 @csrf
 

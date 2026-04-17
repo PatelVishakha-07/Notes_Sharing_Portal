@@ -34,7 +34,7 @@ class NotesController extends Controller
         $visibility = "Public";       
 
         $request->validate([
-            "title"=>"required",
+            "title"=>"required|min:3",
             "cat_id"=>"required",
             "sub_id"=>"required",
             "file"=>"required"
@@ -86,10 +86,10 @@ class NotesController extends Controller
         
         if($status == "Public"){
             $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)
-            ->where("visibility","Public")->where("status","Approved")->get();
+            ->where("visibility","Public")->get();
         }else{
             $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)
-            ->where("visibility","Private")->where("status","Approved")->get();
+            ->where("visibility","Private")->get();
         }
         return view("user.list", compact("notes","status"));
     }

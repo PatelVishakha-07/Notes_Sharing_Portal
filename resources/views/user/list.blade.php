@@ -22,6 +22,7 @@
                         <th style="width: 200px;">Title</th>
                         <th style="width: 150px;">Category</th>
                         <th style="width: 150px;">Subject</th>
+                        <th style="width: 150px;">Status</th>
                         <th style="width: 100px;">Date</th>
                         @if($status == "Private")
                             <th style="width: 100px;">Code</th>
@@ -49,6 +50,12 @@
                             <td>
                                 <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                     {{$n->subject->sub_name}}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
+                                    {{$n->status}}
                                 </span>
                             </td>
 
@@ -107,6 +114,7 @@
                                        onclick="return confirm('Delete this note?')">
                                         Delete
                                     </a>
+                                                                        
                                 </div>
                             </td>
                         </tr>

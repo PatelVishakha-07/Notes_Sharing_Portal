@@ -45,9 +45,9 @@
                             </a>
 
                             <a href="{{url('delete_category',$c->id)}}" 
-                               class="btn-delete"
-                               onclick="return confirm('Are you sure you want to delete this category?')">
-                                🗑 Delete
+                                class="btn-delete"
+                                onclick="return confirm('Are you sure you want to delete this category?')">
+                                    🗑 Delete
                             </a>
 
                         </div>
