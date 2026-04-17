@@ -37,6 +37,12 @@ Create your account and start sharing notes.
 
 <div class="max-w-md w-full mx-auto">
 
+    @if(session('error'))
+        <p class="alert-error text-red-500 mb-3">
+            {{ session('error') }}
+        </p>
+    @endif
+
     <form action="{{url('process_register')}}" method="POST" class="space-y-4">
     @csrf
 

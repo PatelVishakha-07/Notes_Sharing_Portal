@@ -40,6 +40,13 @@ Access notes, share knowledge, and collaborate with students.
 <p class="text-muted mb-6">Login to your account</p>
 
 <div class="max-w-md w-full mx-auto">
+
+    @if(session('error'))
+        <p class="alert-error text-red-500 mb-3">
+            {{ session('error') }}
+        </p>
+    @endif
+
     <form action="{{url('process_login')}}" method="POST" class="space-y-4">
     @csrf
     
@@ -60,6 +67,7 @@ Access notes, share knowledge, and collaborate with students.
     <button class="btn-primary">Login</button>
 
     </form>
+    
 </div>
 
 <div class="mt-4 text-center">
