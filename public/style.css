@@ -654,3 +654,20 @@ select.form-control:focus {
 .login-gate:hover {
     background: rgba(255,255,255,0.75);
 }
+
+.search-pill {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .search-pill {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 12px;
+    }
+
+    .filter-select,
+    .search-btn {
+        width: 100%;
+    }
+}

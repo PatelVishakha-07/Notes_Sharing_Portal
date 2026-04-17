@@ -12,6 +12,51 @@
     </a>
 </div>
 
+
+<form method="GET" action="{{ url('user/list_'.Str::lower($status).'_notes/'.$status) }}" class="mb-4">
+
+    <div class="search-pill">
+
+        <!-- Search -->
+        <input type="text" 
+               name="search" 
+               class="search-input"
+               placeholder="🔍 Search notes..."
+               value="{{ request('search') }}">
+
+        <!-- Category -->
+        <select name="cat_id" class="filter-select" id="filter_category">
+            <option value="">All Categories</option>
+            @foreach($category as $c)
+                <option value="{{ $c->id }}" {{ request('cat_id') == $c->id ? 'selected' : '' }}>
+                    {{ $c->cat_name }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- Subject -->
+        <select name="sub_id" class="filter-select" id="filter_subject">
+            <option value="">All Subjects</option>
+            @foreach($subject as $s)
+                <option value="{{ $s->id }}" {{ request('sub_id') == $s->id ? 'selected' : '' }}>
+                    {{ $s->sub_name }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- Search Button -->
+        <button class="search-btn">
+            Search
+        </button>
+
+        <!-- Clear -->
+        <a href="{{ url('user/list_'.Str::lower($status).'_notes/'.$status) }}" class="clear-btn"> ✕ </a>
+
+    </div>
+
+</form>
+
+
 <div class="card border-0 shadow-sm category-card">
     <div class="card-body p-0"> 
         <div class="table-responsive">
@@ -74,12 +119,14 @@
 
                             <td>
                                 @foreach ($n->filePath as $fp)
-                                    <div class="d-flex flex-column gap-1 mb-2"> <a href="{{ asset('storage/'.$fp->file_path) }}" 
-                                           target="_blank" 
-                                           class="btn btn-sm py-0 px-2 text-center" 
-                                           style="background: #6366f1; color: white; font-size: 9px; line-height: 1.6; border-radius: 4px;">
-                                            View
-                                        </a>
+                                    <div class="d-flex flex-column gap-1 mb-2"> 
+                                       <a href="{{ url('view-file/'.$fp->file_path) }}" 
+                                            target="_blank" 
+                                            class="btn btn-sm py-0 px-2 text-center"
+                                            style="background: #6366f1; color: white; font-size: 9px;">
+                                                View
+                                        </a>      
+
                                         <a href="{{ asset('storage/'.$fp->file_path) }}" 
                                            download 
                                            class="btn btn-sm py-0 px-2 text-center" 

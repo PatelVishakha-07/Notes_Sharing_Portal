@@ -10,6 +10,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Str;
+
 //Logout
 Route::get("logout",[AuthController::class,"logout"]);
 
@@ -76,13 +78,46 @@ Route::get('/', [HomeController::class, "home"]);
 Route::get('home/note/view/{id}', [HomeController::class, "viewHomeNote"])->middleware("auth");
 
 
+
+//route to open the notes in new tab
+/*
 Route::get('/view-file/{file}', function ($file) {
 
     $path = storage_path('app/public/' . $file);
 
+     if (!file_exists($path)) {
+        abort(404);
+    }
+
+    $mimeType = mime_content_type($path);
+
     return response()->file($path, [
-        'Content-Type' => 'application/pdf',
+        'Content-Type' => $mimeType,//'application/pdf',
         'Content-Disposition' => 'inline; filename="'.$file.'"'
     ]);
-});
+});  */
 
+
+Route::get('/view-file/{file}', function ($file) {
+
+    $path = storage_path('app/public/' . $file);
+
+    if (!file_exists($path)) {
+        abort(404);
+    }
+
+    $extension = Str::lower(pathinfo($file, PATHINFO_EXTENSION));
+
+    $url = asset('storage/' . $file); // must be public accessible
+
+    // 📄 Word / Excel / PPT → Microsoft Viewer
+    if (in_array($extension, ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])) {
+        return redirect(
+            "https://view.officeapps.live.com/op/view.aspx?src=" . urlencode($url)
+        );
+    }
+
+    // 📄 PDF / Images → open inline
+    return response()->file($path);
+
+});

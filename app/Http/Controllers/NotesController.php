@@ -81,17 +81,35 @@ class NotesController extends Controller
         return redirect("user/list_public_notes/Public");
     }
 
-    public function listNotes($status){
+    public function listNotes($status, Request $request)
+    {
         $user_id = Auth::id();
-        
-        if($status == "Public"){
-            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)
-            ->where("visibility","Public")->get();
-        }else{
-            $notes = Notes::with("subject","category","filePath","user","youtubeLink")->where("user_id",$user_id)
-            ->where("visibility","Private")->get();
+
+        $category = Category::get();
+        $subject = Subject::get();
+
+        // STEP 1: Base query with strict status separation
+        $notes = Notes::with("subject","category","filePath","user","youtubeLink")
+                    ->where("user_id", $user_id)
+                    ->where("visibility", $status); // 👈 THIS keeps Public/Private separate
+
+        // STEP 2: Filters inside same status
+        if ($request->cat_id) {
+            $notes->where("cat_id", $request->cat_id);
         }
-        return view("user.list", compact("notes","status"));
+
+        if ($request->sub_id) {
+            $notes->where("sub_id", $request->sub_id);
+        }
+
+        if ($request->search) {
+            $notes->where("title", "like", "%".$request->search."%");
+        }
+
+        // STEP 3: Final result
+        $notes = $notes->latest()->get();
+
+        return view("user.list", compact("notes","status","category","subject"));
     }
 
     public function deleteNote($id){
