@@ -50,21 +50,26 @@
                     <td>
                         <div class="d-flex flex-wrap gap-1">
                             @foreach ($pn->filePath as $fp)
-                                <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="browse-btn">
+                                <a href="{{ url('/file/view/'.$fp->file_path) }}" target="_blank" class="browse-btn">
                                     📄 View
-                                </a>
-                                {{-- YOUTUBE LINK --}}
-                                @if(!empty($pn->youtubeLink))
-                                        @foreach ($pn->youtubeLink as $yt)
-                                            <a href="{{ $yt->youtube_link }}" 
-                                            target="_blank" 
-                                            class="btn btn-sm py-0 px-2" 
-                                            style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
-                                            Watch
-                                            </a>
-                                        @endforeach
-                                    @endif
+                                </a>                               
+                                                              
                             @endforeach
+                            {{-- YOUTUBE LINK --}}  
+                            @if($pn->youtubeLink && $pn->youtubeLink->count())
+                                @foreach ($pn->youtubeLink as $yt)
+
+                                    @if(!empty($yt->youtube_link))
+                                        <a href="{{ $yt->youtube_link }}"
+                                        target="_blank"
+                                        class="btn btn-sm py-0 px-2"
+                                        style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
+                                            Watch
+                                        </a>
+                                    @endif
+
+                                @endforeach
+                            @endif
                         </div>
                     </td>
 

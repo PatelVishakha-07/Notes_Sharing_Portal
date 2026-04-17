@@ -31,7 +31,7 @@
             <tbody>
                 @forelse($category as $c)
                 <tr>
-                    <td>#{{$c->id}}</td>
+                    <td>{{$c->id}}</td>
 
                     <td>
                         <span class="fw-semibold">{{$c->cat_name}}</span>
