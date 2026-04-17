@@ -15,13 +15,11 @@
         </a>
     </div>
 
-    <div class="col-md-3">
-        <a href="{{ url('/admin/notes') }}" style="text-decoration:none; color:inherit;">
+    <div class="col-md-3">        
             <div class="dashboard-card">
                 <p>Total Notes</p>
                 <h4>{{$totalNotes}}</h4>
             </div>
-        </a>
     </div>
 
     <div class="col-md-3">
@@ -51,7 +49,7 @@
 <h4 class="mt-3">All Notes</h4>
 
 <!-- SEARCH BOX -->
-<form method="GET" class="search-notes-wrapper mb-3">
+<form method="GET" class="search-notes-wrapper mb-3" action="{{url('admin_dashboard')}}">
 
     <div class="search-pill">
 
@@ -106,13 +104,14 @@
                 <th>User</th>
                 <th>Category</th>
                 <th>Subject</th>
+                <th>Actions</th>
                 <th>Date</th>
             </tr>
         </thead>
 
         <tbody>
             @forelse($notes as $note)
-                <tr>
+               <tr>
                     <td>{{ $note->id }}</td>
 
                     <td>
@@ -133,9 +132,31 @@
                         <span class="badge bg-light text-dark border">
                             {{ $note->subject->sub_name ?? '-' }}
                         </span>
-                    </td>
+                    </td>   
 
+                    {{-- ✅ NEW ACTION COLUMN --}}
+                    <td>
+                        
+                        {{-- PDF FILES --}}
+                        @foreach ($note->filePath ?? [] as $fp)
+                            <a href="{{ asset('storage/'.$fp->file_path) }}"
+                            target="_blank"
+                            class="btn btn-sm btn-outline-primary mb-1">
+                                📄 View
+                            </a>
+                        @endforeach
+
+                        {{-- YOUTUBE LINKS --}}
+                        @foreach ($note->youtubeLink ?? [] as $yt)
+                            <a href="{{ $yt->youtube_link }}"
+                            target="_blank"
+                            class="btn btn-sm btn-danger mb-1">
+                                ▶ Watch
+                            </a>
+                        @endforeach
+                    </td>
                     <td>{{ $note->created_at->format('d M Y') }}</td>
+
                 </tr>
             @empty
                 <tr>

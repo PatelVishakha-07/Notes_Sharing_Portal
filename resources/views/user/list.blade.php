@@ -2,116 +2,126 @@
 
 @section("content")
 
-<a href="{{url('user/upload_notes')}}" class="btn btn-success mb-3">
-➕ Add New Notes
-</a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-0">📒 My Notes</h4>
+        <small class="text-muted">Manage your uploaded study materials</small>
+    </div>
+    <a href="{{url('user/upload_notes')}}" class="btn-add text-decoration-none py-2 px-3">
+        Add New Notes
+    </a>
+</div>
 
-<div class="container mt-4">
-
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">📒 Notes List</h4>
-        </div>
-
-        <div class="card-body">
-
-            <table class="table table-bordered table-hover text-center align-middle">
-                <thead class="table-dark">
+<div class="card border-0 shadow-sm category-card">
+    <div class="card-body p-0"> 
+        <div class="table-responsive">
+            <table class="custom-table clean-table mb-0">
+                <thead>
                     <tr>
-                        <th>Notes ID</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Subject</th>
-                         @if($status == "Private")
-                            <th>Access Code</th>
+                        <th class="ps-3" style="width: 60px;">ID</th>
+                        <th style="width: 200px;">Title</th>
+                        <th style="width: 150px;">Category</th>
+                        <th style="width: 150px;">Subject</th>
+                        <th style="width: 100px;">Date</th>
+                        @if($status == "Private")
+                            <th style="width: 100px;">Code</th>
                         @endif
-                        <th>Notes File</th>
-                        <th width="150">Action</th>
+                        <th style="width: 120px;">Files</th>
+                        <th class="text-end pe-3" style="width: 120px;">Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-
                     @foreach ($notes as $n)
                         <tr>
-                            <td>{{$n->id}}</td>
+                            <td class="ps-3 text-muted" style="font-size: 11px;">{{$n->id}}</td>
 
-                            <td class="fw-semibold">{{$n->title}}</td>
+                            <td class="fw-bold text-dark" style="font-size: 12px; line-height: 1.4;">
+                                {{ Str::limit($n->title, 35) }}
+                            </td>
 
                             <td>
-                                <span class="badge bg-info">
+                                <span class="badge badge-soft-info" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                     {{$n->category->cat_name}}
                                 </span>
                             </td>
 
                             <td>
-                                <span class="badge bg-secondary">
+                                <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                     {{$n->subject->sub_name}}
                                 </span>
                             </td>
 
+                            <td class="text-muted" style="font-size: 11px; white-space: nowrap;">
+                                {{ $n->created_at->format('d M y') }}
+                            </td>
+
                             @if($status == "Private")
                                 <td>
-                                    <span class="badge bg-dark">
-                                        {{$n->access_code}}
-                                    </span>
-                                    <button class="btn btn-sm btn-outline-secondary ms-2"
-                                        onclick="copyCode('{{$n->access_code}}')">
-                                        Copy
-                                    </button>
+                                    <div class="d-flex flex-column gap-1">
+                                        <code class="text-primary bg-light px-1 rounded text-center" style="font-size: 10px;">{{$n->access_code}}</code>
+                                        <span role="button" class="text-muted text-center" onclick="copyCode('{{$n->access_code}}')" style="font-size: 9px; cursor: pointer;"><u>Copy</u></span>
+                                    </div>
                                 </td>
                             @endif
 
                             <td>
                                 @foreach ($n->filePath as $fp)
+                                    <div class="d-flex flex-column gap-1 mb-2"> <a href="{{ asset('storage/'.$fp->file_path) }}" 
+                                           target="_blank" 
+                                           class="btn btn-sm py-0 px-2 text-center" 
+                                           style="background: #6366f1; color: white; font-size: 9px; line-height: 1.6; border-radius: 4px;">
+                                            View
+                                        </a>
+                                        <a href="{{ asset('storage/'.$fp->file_path) }}" 
+                                           download 
+                                           class="btn btn-sm py-0 px-2 text-center" 
+                                           style="background: #22c55e; color: white; font-size: 9px; line-height: 1.6; border-radius: 4px;">
+                                            Download
+                                        </a>
 
-                                    {{-- View PDF --}}
-                                    <a href="{{ asset('storage/'.$fp->file_path) }}"
-                                    target="_blank"
-                                    class="btn btn-sm btn-outline-primary mb-1">
-                                    📄 View
-                                    </a>
-
-                                    {{-- Download PDF --}}
-                                    <a href="{{ asset('storage/'.$fp->file_path) }}"
-                                    download
-                                    class="btn btn-sm btn-outline-success mb-1">
-                                    ⬇ Download
-                                    </a><br>
-
+                                        @if(!empty($n->youtubeLink))
+                                        @foreach ($n->youtubeLink as $yt)
+                                            <a href="{{ $yt->youtube_link }}" 
+                                            target="_blank" 
+                                            class="btn btn-sm py-0 px-2" 
+                                            style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
+                                            Watch
+                                            </a>
+                                        @endforeach
+                                    @endif
+                                    </div>
                                 @endforeach
                             </td>
 
-                            <td>
-                                <a href="{{url('user/edit_notes_page/'.$n->id)}}"
-                                   class="btn btn-sm btn-warning">
-                                   ✏ Edit
-                                </a>
-
-                                <a href="{{url('user/delete_notes/'.$n->id)}}"
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Are you sure you want to delete this note?')">
-                                   🗑 Delete
-                                </a>
+                            <td class="text-end pe-3">
+                                <div class="d-flex flex-column gap-1 align-items-end">
+                                    <a href="{{url('user/edit_notes_page/'.$n->id)}}" 
+                                       class="btn btn-outline-success py-0 px-2 w-100" 
+                                       style="font-size: 10px; line-height: 1.8; max-width: 60px;">
+                                        Edit
+                                    </a>
+                                    <a href="{{url('user/delete_notes/'.$n->id)}}" 
+                                       class="btn btn-outline-danger py-0 px-2 w-100" 
+                                       style="font-size: 10px; line-height: 1.8; max-width: 60px;"
+                                       onclick="return confirm('Delete this note?')">
+                                        Delete
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
-
             </table>
-
         </div>
     </div>
-
 </div>
+
 <script>
     function copyCode(code){
         navigator.clipboard.writeText(code);
         alert("Access code copied!");
     }
 </script>
-
-
 
 @endsection

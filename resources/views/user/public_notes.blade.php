@@ -5,8 +5,11 @@
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 <link href="{{ asset('jquery-3.6.0.min.js') }}" rel="stylesheet">
 
-<!-- HEADER -->
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+<!-- HEADER + FILTER -->
+<form method="GET" action="{{ url('user/all_notes') }}" 
+      style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
+
+    <!-- LEFT TITLE -->
     <div>
         <h2 style="margin:0; font-size:18px; font-weight:700;">🌍 Public Notes</h2>
         <p class="text-muted" style="margin:2px 0 0; font-size:12px;">
@@ -14,8 +17,57 @@
         </p>
     </div>
 
-    <input type="text" class="search-box" placeholder="Search notes...">
-</div>
+    <!-- RIGHT FILTERS -->
+    <div style="display:flex; gap:40px; align-items:center;">
+
+        <!-- SEARCH -->
+        <input type="text" name="search" value="{{ request('search') }}"
+            placeholder="enter notes title..."
+            style="padding:6px 10px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
+
+        <!-- CATEGORY -->
+        <select name="category"
+            style="padding:6px 8px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
+            <option value="">Category</option>
+            @foreach($category ?? [] as $cat)
+                <option value="{{ $cat->id }}" 
+                    {{ request('category') == $cat->id ? 'selected' : '' }}>
+                    {{ $cat->cat_name }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- SUBJECT -->
+        <select name="subject"
+            style="padding:6px 8px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
+            <option value="">Subject</option>
+            @foreach($subject ?? [] as $sub)
+                <option value="{{ $sub->id }}" 
+                    {{ request('subject') == $sub->id ? 'selected' : '' }}>
+                    {{ $sub->sub_name }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- BUTTON -->
+        <button type="submit"
+            style="padding:6px 12px; font-size:12px; border-radius:8px; background:#2563eb; color:white; border:none;">
+            🔍 Search
+        </button>
+
+        <!-- CLEAR FILTER -->
+        @if(request('search') || request('category') || request('subject'))
+            <a href="{{ url('user/all_notes') }}"
+               style="font-size:14px; text-decoration:none; color:#ef4444;">
+                ✕
+            </a>
+        @endif
+
+    </div>
+
+</form>
+
+
 
 <!-- GRID -->
 <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; ">
@@ -113,6 +165,10 @@
         </div>
 
     @endforeach
+
+    <div class="d-flex justify-content-center mt-4">
+    {{ $notes->appends(request()->query())->links('pagination::bootstrap-5') }}
+</div>
 
 </div>
 

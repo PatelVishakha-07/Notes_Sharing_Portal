@@ -109,7 +109,7 @@ body {
     color: white;
     position: fixed;
     padding-top: 20px;
-    width:230px;
+    width:240px;
     transition: width 0.3s ease;
     overflow:hidden;
 }
@@ -123,6 +123,8 @@ body {
     font-weight: 600;
     padding: 15px 25px;
     margin-bottom: 20px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .logo span {
@@ -134,12 +136,12 @@ body {
     display:flex;
     align-items:center;
     gap:12px;
-    font-size:15px;
-    padding: 14px 25px;
+    font-size:12px;
+    padding: 12px 20px;
     color: #cbd5e1;
     text-decoration: none;
-    border-radius: 10px;
-    margin: 5px 15px;
+    border-radius: 8px;
+    margin: 6px 12px;
     transition: 0.3s;
 }
 
@@ -248,8 +250,23 @@ body {
     pointer-events:none;
 }
 
+.sidebar-collapsed .sidebar a span {
+    display: none;
+}
+
 .sidebar-collapsed .sidebar a{
     justify-content:center;
+    padding: 12px 0;
+    margin: 6px 0;
+}
+
+.sidebar-collapsed .logo {
+    justify-content: center;
+    padding: 15px 0;
+}
+
+.sidebar-collapsed .logo span {
+    display: none;
 }
 
 .sidebar-collapsed .header,

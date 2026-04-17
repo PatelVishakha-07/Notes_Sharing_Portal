@@ -113,10 +113,30 @@
                             <td> <span class="badge badge-soft-info"> {{$n->category->cat_name}} </span> </td>
                             <td> <span class="badge badge-soft-secondary"> {{$n->subject->sub_name}} </span> </td>
 
-                            <td>
-                                @foreach ($n->filePath as $fp)
-                                    <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary"> 📄 View </a>
-                                @endforeach
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    {{-- PDF Files --}}
+                                    @foreach ($n->filePath as $fp)
+                                        <a href="{{ asset('storage/'.$fp->file_path) }}" 
+                                        target="_blank" 
+                                        class="btn btn-sm py-0 px-2" 
+                                        style="background: #6366f1; color: white; font-size: 10px; line-height: 2;">
+                                        View
+                                        </a>                                   
+                                    @endforeach
+
+                                    {{-- Youtube Links --}}
+                                    @if(!empty($n->youtubeLink))
+                                        @foreach ($n->youtubeLink as $yt)
+                                            <a href="{{ $yt->youtube_link }}" 
+                                            target="_blank" 
+                                            class="btn btn-sm py-0 px-2" 
+                                            style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
+                                            Watch
+                                            </a>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </td>
                         </tr>   
                         @empty

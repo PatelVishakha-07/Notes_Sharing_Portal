@@ -53,6 +53,17 @@
                                 <a href="{{ asset('storage/'.$fp->file_path) }}" target="_blank" class="browse-btn">
                                     📄 View
                                 </a>
+                                {{-- YOUTUBE LINK --}}
+                                @if(!empty($pn->youtubeLink))
+                                        @foreach ($pn->youtubeLink as $yt)
+                                            <a href="{{ $yt->youtube_link }}" 
+                                            target="_blank" 
+                                            class="btn btn-sm py-0 px-2" 
+                                            style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
+                                            Watch
+                                            </a>
+                                        @endforeach
+                                    @endif
                             @endforeach
                         </div>
                     </td>

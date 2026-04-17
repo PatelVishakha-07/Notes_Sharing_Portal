@@ -13,7 +13,7 @@ class AdminController extends Controller
     public function showUserList(Request $request){
         //$users = User::where("role","User")->withCount('notes');
         $users = User::where("role","User")
-        ->withCount(['notes','notes as approved_notes_count' => function($q){ $q->where('status', 1); }]);
+        ->withCount(['notes','notes as approved_notes_count' => function($q){ $q->where('status', "Approved"); }]);
 
 
         if($request->search){

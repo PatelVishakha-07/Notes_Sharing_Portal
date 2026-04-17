@@ -16,7 +16,7 @@
         <!-- SIDEBAR -->
         <div class="sidebar">
 
-             <div class="logo"> 📝 <span class="logo-text">NOTEPORTAL CMS</span> </div>
+             <div class="logo"> 📝 <span>NOTEPORTAL</span> </div>
             <a href="{{ url('user_dashboard') }}" class="{{ request()->is('user_dashboard') ? 'active' : '' }}" data-bs-toggle="tooltip"
             data-bs-placement="right" title="Dashboard"> 📊 <span>Dashboard</span> </a>
 

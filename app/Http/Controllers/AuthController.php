@@ -28,10 +28,18 @@ class AuthController extends Controller
         $totalUser = User::where("role","User")->count();
 
 
-        $notes = Notes::with("category","user","subject","filePath")->where("status","Approved");
+        $notes = Notes::with("category","user","subject","filePath","youtubeLink")->where("status","Approved");
 
         if($request->search){
-            $notes->where('title', 'like', '%' . $request->search . '%');
+            $notes->where('title', 'like', '%' . $request->search .'%');
+        }
+
+        if($request->category){
+            $notes->where('cat_id', $request->category);
+        }
+
+        if($request->subject){
+            $notes->where('sub_id', $request->subject);
         }
 
         $notes = $notes->orderBy('id', 'desc')->paginate(10);

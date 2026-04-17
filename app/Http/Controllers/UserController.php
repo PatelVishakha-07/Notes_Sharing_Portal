@@ -2,21 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Favourite;
 use App\Models\Notes;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
 
     //function to view public notes page
-    public function publicNotesPage(){
-        $notes = Notes::with("filePath","category","subject","user")->where("visibility","Public")->where("status","Approved")->get();
+    public function publicNotesPage(Request $request){
+        $category = Category::get();
+        $subject = Subject::get();
+        $notes = Notes::with("filePath","category","subject","user","youtubeLink")->where("visibility","Public")->where("status","Approved");
+
+        if($request->search){
+            $notes = $notes->where("title","like","%".$request->search."%");
+        }
+
+        if($request->category){
+            $notes = $notes->where("cat_id",$request->category);
+        }
+
+        if($request->subject){
+            $notes = $notes->where("sub_id",$request->subject);
+        }
+
+        //$notes = $notes->get();
+        $notes = $notes->paginate(20);
 
         foreach($notes as $n){
             $n->is_favourite = Favourite::where("user_id", auth()->id())->where("notes_id", $n->id)->exists();
         }
-        return view("user.public_notes",compact("notes"));
+
+
+        return view("user.public_notes",compact("notes","category", "subject"));
     }
 
 

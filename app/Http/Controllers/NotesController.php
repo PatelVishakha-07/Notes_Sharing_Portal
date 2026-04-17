@@ -110,7 +110,7 @@ class NotesController extends Controller
         $category = Category::get();
         $subject = Subject::get();
         $notes = Notes::with("category","subject","filePath","youtubeLink")->where("visibility","Public")->where("status","Approved");
-
+        
         if($request->cat_id){
             $notes = $notes->where("cat_id",$request->cat_id);
         }
@@ -127,6 +127,7 @@ class NotesController extends Controller
         }
 
         $notes = $notes->get();
+
         return view("user.search", compact("category","subject","notes"));
     }
 
