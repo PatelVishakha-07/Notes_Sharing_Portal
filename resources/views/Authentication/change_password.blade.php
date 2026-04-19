@@ -11,23 +11,32 @@
             Keep your account secure by updating your password
         </p>
 
-        <form method="POST" action="{{ url('update_password') }}">
+        <form method="POST" action="{{ url('update_password') }}" onsubmit="return confirm('Are you sure you want to update your password?')">
             @csrf
 
             <div class="mb-3">
                 <label class="form-label">Current Password</label>
                 <input type="password" name="current_password" class="form-control">
             </div>
+            @error('current_password')
+                <p class="alert-error">{{ $message }}</p>
+            @enderror
 
             <div class="mb-3">
                 <label class="form-label">New Password</label>
                 <input type="password" name="new_password" class="form-control">
             </div>
+            @error('new_password')
+                <p class="alert-error">{{ $message }}</p>
+            @enderror
 
             <div class="mb-3">
                 <label class="form-label">Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control">
             </div>
+            @error('confirm_password')
+                <p class="alert-error">{{ $message }}</p>
+            @enderror
 
             <div class="d-flex justify-content-between mt-4">                
                 <button type="submit" class="btn btn-primary">Update Password</button>
@@ -37,10 +46,12 @@
                         Cancel
                 </a>
             </div>
-
         </form>
     </div>
-
 </div>
+
+@if(session("error"))
+   <p class="alert-error" >{{session('error')}} </p> 
+@endif
 
 @endsection

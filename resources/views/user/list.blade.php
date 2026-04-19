@@ -134,16 +134,16 @@
                                             Download
                                         </a>
 
-                                        @if(!empty($n->youtubeLink))
-                                        @foreach ($n->youtubeLink as $yt)
-                                            <a href="{{ $yt->youtube_link }}" 
-                                            target="_blank" 
-                                            class="btn btn-sm py-0 px-2" 
-                                            style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
-                                            Watch
-                                            </a>
-                                        @endforeach
-                                    @endif
+                                        @if($n->youtubeLink && $n->youtubeLink->count() > 0)
+                                            @foreach ($n->youtubeLink as $yt)
+                                                @if(!empty($yt->youtube_link))
+                                                    <a href="{{ $yt->youtube_link }}"  target="_blank"  class="btn btn-sm py-0 px-2" 
+                                                    style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
+                                                        Watch
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     </div>
                                 @endforeach
                             </td>

@@ -9,6 +9,7 @@ use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -128,29 +129,32 @@ class AuthController extends Controller
         return view("Authentication.change_password");
     }
 
-    public function updatePassword(Request $request){
+    public function updatePassword(Request $request)
+    {
         $request->validate([
-            "current_password"=>"required|min:6",
-            "new_password"=>"required|min:6",
-            "confirm_password"=>"required|min:6"
+            "current_password" => "required|min:6",
+            "new_password" => "required|min:6",
+            "confirm_password" => "required|min:6"
         ]);
 
-        $is_password_correct = User::where("id",auth()->id())->where("password",$request->current_password)->first();
+        $user = auth()->user();
 
-        if($is_password_correct){
-            $new_password = $request->new_password;
-            
-            if($new_password == $request->confirm_password)
-                return back()->with("error","Password and Confirm Password doesn't match");
+        if(!Hash::check($request->current_password, $user->password))
+            return back()->with("error", "Incorrect Password! Please enter correct password");
+        
 
-            $user = User::find(auth()->id());
-            $user->password = $request->new_password;
-            $user->save();
-
-            return back()->with("success","Password Changed Successfully");
+        if($request->new_password != $request->confirm_password){
+            return back()->with("error", "Password and Confirm Password doesn't match");
         }
 
-        return back()->with("error","Incorrect Password! Please enter correct password");
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        if($user->role == 'Admin')
+            return redirect('admin_dashboard')->with('success', 'Password updated successfully');
+        else 
+            return redirect('user_dashboard')->with('success', 'Password updated successfully');
+        
     }
 
     public function showChangeNamePage(){
@@ -158,13 +162,17 @@ class AuthController extends Controller
     }
 
     public function updateName(Request $request){
-        $request->validate(["name"=>"required:min:3"]);
+        $request->validate(["name"=>"required|min:3"]);
 
         $user = User::find(auth()->id());
         $user->name = $request->name;
         $user->save();
 
-        return back()->with("success","Name Changed Successfully");
+        if($user->role == 'Admin')
+            return redirect('admin_dashboard')->with('success', 'Name updated successfully');
+        else 
+            return redirect('user_dashboard')->with('success', 'Name updated successfully');
+        
     }
     
 }

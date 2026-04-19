@@ -66,7 +66,11 @@
         <!-- Admin -->
         <div class="d-flex align-items-center gap-2">
 
-            <div class="avatar"> {{ strtoupper(substr(auth()->user()->name,0,1)) }} </div>
+            <div class="avatar"> 
+                <a href="#" data-bs-toggle="offcanvas" data-bs-target="#userSidebar">
+                    {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }} 
+                </a>
+            </div>
 
             <div class="user-info text-start">
                 <strong class="d-block lh-1"> {{ auth()->user()->name }} </strong>
@@ -88,6 +92,42 @@
 <div class="footer">
 © 2026 NotePortal CMS | Notes Sharing System
 </div>    
+
+{{-- ============       Side bar to show user information       ========================== --}}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="userSidebar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body text-center">
+        
+        <!-- Avatar Circle -->
+        <div class="profile-avatar mb-3">
+            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+        </div>
+
+        <!-- User Info -->
+        <h6>{{ auth()->user()->name }}</h6>
+        <p class="text-muted">Email: {{ auth()->user()->email }}</p>
+
+        <hr>
+
+        <!-- Buttons -->
+        <a href="{{ url('change_name') }}" class="btn btn-primary w-100 mb-2">
+            Change Name
+        </a>
+
+        <a href="{{ url('change_password') }}" class="btn btn-outline-danger w-100">
+            Change Password
+        </a>
+
+    </div>
+</div>
+
+
+{{-- ================       JavaScript code for tootltip          =================================== --}}
 
 <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 

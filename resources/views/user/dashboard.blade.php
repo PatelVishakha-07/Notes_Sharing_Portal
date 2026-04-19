@@ -72,7 +72,7 @@
 
 <div class="container py-4">
 
-    {{-- HEADER --}}
+    {{-- header --}}
     <div class="mb-4">
     <h4 class="fw-bold mb-2">My Dashboard</h4>
 
@@ -85,7 +85,7 @@
     </div>
 </div>
 
-    {{-- DASHBOARD CARDS --}}
+    {{-- cards  --}}
     <div class="row mb-4">
         <div class="col-6 col-md-3 mb-3">
             <div class="dashboard-card">
@@ -122,7 +122,7 @@
         </a>
     </div>
 
-    {{-- NOTES GRID --}}
+    {{-- Public Notes --}}
     <div class="row">
         @foreach ($notes as $n)
         <div class="col-6 col-md-4 col-lg-3 mb-4">
@@ -168,8 +168,7 @@
                     </p>
 
                    {{-- BUTTONS ROW --}}
-                    <div class="mt-3">
-                        
+                    <div class="mt-3">                        
                         {{-- PDF Actions --}}                        
                         @if(count($n->filePath) > 0)
                             <div class="d-flex flex-column gap-2 mb-2">
@@ -190,15 +189,17 @@
                         @endif
 
                         {{-- YouTube Actions --}}
-                        @if(!empty($n->youtubeLink))
+                        @if($n->youtubeLink && $n->youtubeLink->count() > 0)
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach ($n->youtubeLink as $yt)
-                                    <a href="{{ $yt->youtube_link }}" 
-                                    target="_blank" 
-                                    class="btn btn-sm btn-youtube flex-grow-1 py-1"
-                                    style="font-size: 11px; min-width: 80px;">
-                                        ▶ Watch
-                                    </a>
+                                    @if(!empty($yt->youtube_link))
+                                        <a href="{{ $yt->youtube_link }}" 
+                                        target="_blank"
+                                        class="btn btn-sm btn-youtube flex-grow-1 py-1"
+                                        style="font-size: 11px; min-width: 80px;">
+                                            ▶ Watch
+                                        </a>
+                                    @endif
                                 @endforeach
                             </div>
                         @endif

@@ -11,7 +11,7 @@
             Update your display name
         </p>
 
-        <form method="POST" action="{{ url('update_name') }}">
+        <form method="POST" action="{{ url('update_name') }}" onsubmit="return confirm('Are you sure you want to update your name?')">
             @csrf
 
             <!-- Current Name -->
@@ -28,21 +28,19 @@
 
             <!-- Buttons -->
             <div class="d-flex justify-content-between mt-4">                
-                <button type="submit" class="btn btn-primary">Update Name</button>
-
-                @php
-                    $dashboard = auth()->user()->role == 'Admin' ? 'admin/dashboard' : 'user/dashboard';
-                @endphp
+                <button type="submit" class="btn btn-primary">Update Name</button>  
 
                 <a href="{{ auth()->user()->role == 'Admin' ? url('admin_dashboard') : url('user_dashboard') }}" 
                     class="btn btn-secondary ms-5">
                         Cancel
                 </a>
             </div>
-
         </form>
     </div>
-
 </div>
+
+@error('name')
+    <p class="alert-error">{{ $message }}</p>
+@enderror
 
 @endsection

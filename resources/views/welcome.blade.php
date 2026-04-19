@@ -20,9 +20,9 @@
             📝 <span style="color: #0f172a; font-weight:700;">NOTEPORTAL</span><span style="color: #6366f1;"></span>
         </div>
         
-        <div class="d-flex gap-2">
-            <a href="{{ url('login') }}" class="btn-cancel" style="padding: 8px 20px; font-size: 14px; text-decoration: none;">Login</a>
-            <a href="{{ url('register') }}" class="btn-primary" style="padding: 8px 20px; font-size: 14px; width: auto; text-decoration: none;">Join Now</a>
+        <div class="d-flex gap-2" style="margin-top: 10px">
+            <a href="{{ url('login') }}" class="btn-login" style="padding: 8px 20px; font-size: 14px; text-decoration: none;">Login</a>
+            <a href="{{ url('register') }}" class="btn-register" style="padding: 8px 20px; font-size: 14px; width: auto; text-decoration: none;">Join Now</a>
         </div>
     </div>
 </nav>
@@ -92,6 +92,36 @@
 <div class="footer mt-5">
     © 2026 NotePortal CMS | Study Notes System
 </div>
+
+<style>
+.btn-login {
+    background: transparent;
+    color: #4f46e5; 
+    border: 1px solid #4f46e5;
+    border-radius: 8px;
+    font-weight: 600;
+
+    transition: all 0.25s ease;
+}
+.btn-login:hover {
+    background: #4f46e5;
+    color: #fff;
+}
+.btn-register {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    transition: all 0.25s ease;
+}
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(79, 70, 229, 0.4);
+    color: #fff;
+}
+</style
 
 </body>
 </html>

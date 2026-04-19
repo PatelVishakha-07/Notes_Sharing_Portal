@@ -142,22 +142,17 @@
 
             </div>
 
-            @if(count($note->youtubeLink) > 0)
-
+            @if($note->youtubeLink && $note->youtubeLink->count() > 0)
                     <div style="padding:0 4px 6px;">
-
                         @foreach($note->youtubeLink as $index  => $link)
-
-                            <a href="{{ $link->youtube_link }}" 
-                            target="_blank"
-                            style="display:block; font-size:11px; color:#2563eb; text-decoration:none; margin-bottom:2px;">
-
-                                🎥 Watch Video {{ $index + 1 }}
-
-                            </a>
-
+                            @if(!empty($link->youtube_link))
+                                <a href="{{ $link->youtube_link }}" 
+                                target="_blank"
+                                style="display:block; font-size:11px; color:#2563eb; text-decoration:none; margin-bottom:2px;">
+                                    🎥 Watch Video {{ $index + 1 }}
+                                </a>
+                            @endif
                         @endforeach
-
                     </div>
 
                 @endif
