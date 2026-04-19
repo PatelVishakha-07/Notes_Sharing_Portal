@@ -17,7 +17,7 @@
 <nav class="navbar-guest">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="logo m-0 p-0">
-            📝 <span style="color: #0f172a; font-weight:700;">NOTEPORTAL</span><span style="color: #6366f1;">CMS</span>
+            📝 <span style="color: #0f172a; font-weight:700;">NOTEPORTAL</span><span style="color: #6366f1;"></span>
         </div>
         
         <div class="d-flex gap-2">

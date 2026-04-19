@@ -32,4 +32,8 @@ class Notes extends Model
     public function favourite(){
         return $this->hasMany(Favourite::class,"notes_id");
     }
+
+    public function rejectedNotes(){
+        return $this->hasMany(Notes::class,"notes_id");
+    }
 }

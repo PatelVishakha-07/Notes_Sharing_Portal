@@ -29,8 +29,8 @@
             <a href="{{ url('user/show_search_notes') }}" data-bs-toggle="tooltip" data-bs-placement="right"
             title="Search Notes"> 🔎 <span>Search Notes</span> </a>
             
-            <br><br>
-            <a href="{{url('logout')}}" style="color:#fb7185;" data-bs-toggle="tooltip" data-bs-placement="right" title="Logout">🚪 <span>Logout</span></a>
+            <a href="{{url('logout')}}" style="color:#fb7185;" data-bs-toggle="tooltip" 
+            data-bs-placement="right" title="Logout">🚪 <span>Logout</span></a>
         </div>
 
        
@@ -64,7 +64,9 @@
 
         <!-- Avatar (Initial) -->
             <div class="avatar">
-                {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }}
+               <a href="#" data-bs-toggle="offcanvas" data-bs-target="#userSidebar">
+                    {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }} 
+                </a>
             </div>
 
             <!-- Name + Role -->
@@ -90,6 +92,43 @@
         <div class="footer">
         © 2026 NotePortal CMS | Notes Sharing System
         </div>
+
+
+{{-- ============       Side bar to show user information       ========================== --}}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="userSidebar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body text-center">
+        
+        <!-- Avatar Circle -->
+        <div class="profile-avatar mb-3">
+            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+        </div>
+
+        <!-- User Info -->
+        <h6>{{ auth()->user()->name }}</h6>
+        <p class="text-muted">Email: {{ auth()->user()->email }}</p>
+
+        <hr>
+
+        <!-- Buttons -->
+        <a href="{{ url('change_name') }}" class="btn btn-primary w-100 mb-2">
+            Change Name
+        </a>
+
+        <a href="{{ url('change_password') }}" class="btn btn-outline-danger w-100">
+            Change Password
+        </a>
+
+    </div>
+</div>
+
+
+{{-- =================    JavaScript code for tool tip   ================= --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>

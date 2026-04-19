@@ -18,11 +18,16 @@
 
         <!-- SEARCH -->
         <form method="GET" class="mb-3" action="{{url('admin/showUsersList')}}">
+
             <div class="input-group input-group-sm" style="max-width: 350px;">
                 <input type="text" name="search"
                        class="form-control" placeholder="Search name or email..." value="{{request('search')}}">
 
-                <button class="btn btn-outline-primary" type="submit"> Search </button>
+                <button class="btn btn-outline-primary" type="submit" style="margin-left:20px;"> Search </button> 
+
+                 @if(request('search') || request('category') || request('subject'))
+                    <a href="{{ url('admin/showUsersList') }}" class="clear-btn" style="margin-left:20px;"> ✕ </a>
+                @endif
             </div>
         </form>
 
@@ -40,7 +45,9 @@
 
                         <th class="py-3 fw-semibold text-uppercase text-muted small border-0"> Status </th>
 
-                        <th class="py-3 fw-semibold text-uppercase text-muted small border-0"> Notes </th>
+                        <th class="py-3 fw-semibold text-uppercase text-muted small border-0"> Notes Count</th>
+
+                        <th class="py-3 fw-semibold text-uppercase text-muted small border-0"> Rejected Count</th>
                     </tr>
                 </thead>
 
@@ -72,6 +79,10 @@
 
                         <td class="text-dark">
                             {{ $user->approved_notes_count ?? 0 }}
+                        </td>
+
+                        <td class="text-dark">
+                            {{ $user->rejected_notes_count ?? 0 }}
                         </td>
 
                     </tr>

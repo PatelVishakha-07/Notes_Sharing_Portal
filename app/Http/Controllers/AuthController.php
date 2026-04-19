@@ -30,8 +30,12 @@ class AuthController extends Controller
 
         $notes = Notes::with("category","user","subject","filePath","youtubeLink")->where("status","Approved");
 
-        if($request->search){
-            $notes->where('title', 'like', '%' . $request->search .'%');
+        if($request->search){            
+
+            $notes->where('title', 'like', '%' . $request->search .'%')
+            ->orWhereHas("user",function ($q) {
+                $q->where("name","like","%".request("search")."%");
+            });
         }
 
         if($request->category){
@@ -102,9 +106,14 @@ class AuthController extends Controller
             "password_confirmation"=>"required|min:6"
         ]);
 
-        if($request->password != $request->password_confirmation){
+        $is_email_exists = User::where("email",$request->email)->first();
+
+        if($is_email_exists)
+            return back()->with("error","Email-Id already exists");
+
+        if($request->password != $request->password_confirmation)
             return back()->with("error","Password and Confirm password doesn't match");
-        }
+        
 
         User::create([
             "name"=>$request->name,
@@ -115,5 +124,47 @@ class AuthController extends Controller
         return redirect("login")->with("success","Registration successful. Please login.");
     }
 
+    public function showChangePasswordPage(){
+        return view("Authentication.change_password");
+    }
+
+    public function updatePassword(Request $request){
+        $request->validate([
+            "current_password"=>"required|min:6",
+            "new_password"=>"required|min:6",
+            "confirm_password"=>"required|min:6"
+        ]);
+
+        $is_password_correct = User::where("id",auth()->id())->where("password",$request->current_password)->first();
+
+        if($is_password_correct){
+            $new_password = $request->new_password;
+            
+            if($new_password == $request->confirm_password)
+                return back()->with("error","Password and Confirm Password doesn't match");
+
+            $user = User::find(auth()->id());
+            $user->password = $request->new_password;
+            $user->save();
+
+            return back()->with("success","Password Changed Successfully");
+        }
+
+        return back()->with("error","Incorrect Password! Please enter correct password");
+    }
+
+    public function showChangeNamePage(){
+        return view("Authentication.change_name");
+    }
+
+    public function updateName(Request $request){
+        $request->validate(["name"=>"required:min:3"]);
+
+        $user = User::find(auth()->id());
+        $user->name = $request->name;
+        $user->save();
+
+        return back()->with("success","Name Changed Successfully");
+    }
     
 }

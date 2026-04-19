@@ -42,6 +42,10 @@ class User extends Authenticatable
         return $this->hasMany(Favourite::class,"user_id");
     }
 
+    public function rejectedNotes(){
+        return $this->hasMany(RejectedNotes::class,"user_id");
+    }
+
     /**
      * Get the attributes that should be cast.
      *

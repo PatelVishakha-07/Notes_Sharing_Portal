@@ -7,9 +7,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0">Subject List</h4>
 
-        <a href="{{url('add_subject')}}" class="btn-add">
-            + Add Subject
-        </a>
+        <a href="{{url('add_subject')}}" class="btn-add"> + Add Subject </a>
     </div>
 
     <table class="custom-table">

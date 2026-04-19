@@ -24,6 +24,11 @@ class CategoryController extends Controller
             "cat_name"=>"required"
         ]);
 
+        $is_category_exists = Category::where("cat_name",$request->cat_name)->first();        
+
+        if($is_category_exists)             
+            return back()->with("error", $request->cat_name." Category already exists");
+
         Category::create([
             "cat_name"=>$request->cat_name
         ]);
@@ -49,6 +54,11 @@ class CategoryController extends Controller
         $request->validate([
             "cat_name"=>"required"
         ]);
+
+        $is_category_exists = Category::where("cat_name",$request->cat_name)->first();
+
+        if($is_category_exists) 
+            return back()->with("error","Category already exists");
 
         $category = Category::find($request->id);
         $category->cat_name = $request->cat_name;

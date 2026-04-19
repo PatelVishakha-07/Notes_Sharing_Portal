@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
@@ -9,8 +8,15 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
 use Illuminate\Support\Str;
+
+//change password 
+Route::get("change_password",[AuthController::class,"showChangePasswordPage"]);
+Route::post("update_password",[AuthController::class,"updatePassword"]);
+
+//change name
+Route::get("change_name",[AuthController::class,"showChangeNamePage"]);
+Route::post("update_name",[AuthController::class,"updateName"]);
 
 //Logout
 Route::get("logout",[AuthController::class,"logout"]);
@@ -41,11 +47,11 @@ Route::prefix("user")->group(function(){
 
 
 
-    //Authentication
-    Route::get("login",[AuthController::class,"loginPage"]);
-    Route::post("process_login",[AuthController::class,"processLogin"]);
-    Route::get("register",[AuthController::class,"registerPage"]);
-    Route::post("process_register",[AuthController::class,"processRegister"]);
+//Authentication
+Route::get("login",[AuthController::class,"loginPage"]);
+Route::post("process_login",[AuthController::class,"processLogin"]);
+Route::get("register",[AuthController::class,"registerPage"]);
+Route::post("process_register",[AuthController::class,"processRegister"]);
 
 
 

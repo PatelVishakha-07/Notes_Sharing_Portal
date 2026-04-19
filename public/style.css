@@ -92,6 +92,22 @@ body {
     background: #4338ca;
 }
 
+.btn-cancel{
+    width: 100%;
+    background: #dc2626;
+    color: white;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 12px;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.btn-cancel:hover{
+    background-color: red;
+}
+
+
 /* ALERT */
 .alert-error {
     background: #fee2e2;
@@ -401,6 +417,8 @@ select.form-control:focus {
     align-items: center;
 }
 
+/* Style for name initial avatar */
+
 .avatar {
     width:36px;
     height:36px;
@@ -412,6 +430,42 @@ select.form-control:focus {
     border-radius:50%;
     font-weight:bold;
 }
+
+.avatar a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    background-color: #0d6efd;
+    color: white;
+
+    border-radius: 50%;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #0d6efd;
+    color: #fff;
+
+    border-radius: 50%;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+
+/* Browse button */
 
 .browse-btn {
     background:#9333ea;
@@ -581,16 +635,32 @@ select.form-control:focus {
     cursor: pointer;
 }
 
+
+/* Clear Button In Search */
 .clear-btn {
-    font-size: 14px;
-    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-left: 8px;
+    background-color: #f8f9fa;
+    color: #dc3545; 
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
     text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s ease;
 }
 
 .clear-btn:hover {
-    color: #ef4444;
+    background-color: #dc3545;
+    color: #fff;
+    border-color: #dc3545;
 }
 
+/* Delete and Edit Button */
 .btn-edit, .btn-delete {
     text-decoration: none;
     font-size: 12px;

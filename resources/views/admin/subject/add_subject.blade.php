@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="row justify-content-center">
+
+    @if(session("error"))
+        <p class="alert-error text-red-500 mb-3"> {{session('error')}} </p>
+    @endif
+    
     <div class="col-md-7">
 
         <div class="card p-4">

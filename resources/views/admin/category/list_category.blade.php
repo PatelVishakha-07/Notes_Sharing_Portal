@@ -14,7 +14,7 @@
         <a href="{{url('add_category')}}" class="btn-add">
             + Add Category
         </a>
-    </div>
+    </div>    
 
     <!-- TABLE -->
     <div class="table-responsive">

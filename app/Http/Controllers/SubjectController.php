@@ -19,6 +19,11 @@ class SubjectController extends Controller
             "cat_id"=>"required"
         ]);
 
+        $is_subject_exists = Subject::where("sub_name",$request->sub_name)->where("cat_id",$request->cat_id)->first();
+
+        if($is_subject_exists) 
+            return back()->with("error","Subject already exists");
+
         Subject::create([
             "sub_name"=>$request->sub_name,
             "cat_id" => $request->cat_id
@@ -48,6 +53,11 @@ class SubjectController extends Controller
             "sub_name"=>"required",
             "cat_id"=>"required"
         ]);
+
+       $is_subject_exists = Category::where("sub_name",$request->sub_name)->where("cat_id",$request->cat_id)->first();
+
+        if($is_subject_exists) 
+            return back()->with("error", $request->sub_name." Subject already exists");
 
         $subject = Subject::find($request->id);
         $subject->sub_name = $request->sub_name;

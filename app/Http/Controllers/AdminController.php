@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Notes;
+use App\Models\RejectedNotes;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +14,9 @@ class AdminController extends Controller
     public function showUserList(Request $request){
         //$users = User::where("role","User")->withCount('notes');
         $users = User::where("role","User")
-        ->withCount(['notes','notes as approved_notes_count' => function($q){ $q->where('status', "Approved"); }]);
+        ->withCount(['notes','notes as approved_notes_count' => function($q){
+             $q->where('status', "Approved"); }, "rejectedNotes"
+             ]);
 
 
         if($request->search){
@@ -22,7 +25,7 @@ class AdminController extends Controller
               ->orWhere('email', 'like', '%' . $request->search . '%');
             });
         }
-
+        
         $users = $users->paginate(10);
 
         return view("admin.list_user", compact("users"));
@@ -43,6 +46,11 @@ class AdminController extends Controller
             $notes = Notes::find($id);
             $notes->status = 'Rejected';
             $notes->save();
+
+            $user_id = $notes->user_id;
+
+            RejectedNotes::create(["notes_id"=>$id, "user_id"=>$user_id]);
+
         }
         return redirect("admin/showPendingNotesList");
     }
