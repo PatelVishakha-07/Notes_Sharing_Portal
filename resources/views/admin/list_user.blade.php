@@ -55,7 +55,7 @@
 
                     @forelse($users as $user)
                     <tr>
-                        <td class="text-muted"> {{ $user->id }} </td>
+                        <td class="text-muted"> {{ $users->firstItem() + $loop->index }} </td>
 
                         <td class="fw-medium"> {{ $user->name }} </td>
 

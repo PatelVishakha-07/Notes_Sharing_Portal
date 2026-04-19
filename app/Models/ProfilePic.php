@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ProfilePic extends Model
+{
+    protected $table = "user_profile";
+    protected $fillable = ["user_id","profile_pic","bio"];
+
+    public function user(){
+        return $this->belongsTo(User::class,"user_id");
+    }
+}

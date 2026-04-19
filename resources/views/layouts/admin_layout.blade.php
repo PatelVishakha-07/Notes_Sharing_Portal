@@ -67,10 +67,16 @@
         <div class="d-flex align-items-center gap-2">
 
             <div class="avatar"> 
-                <a href="#" data-bs-toggle="offcanvas" data-bs-target="#userSidebar">
-                    {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }} 
-                </a>
-            </div>
+            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#userSidebar">
+                
+                @if(auth()->user()->profile && auth()->user()->profile->profile_pic)
+                    <img src="{{ asset('profile/'.auth()->user()->profile->profile_pic) }}" class="avatar-img">
+                @else
+                    {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                @endif
+
+            </a>
+        </div>
 
             <div class="user-info text-start">
                 <strong class="d-block lh-1"> {{ auth()->user()->name }} </strong>
@@ -104,12 +110,54 @@
     <div class="offcanvas-body text-center">
         
         <!-- Avatar Circle -->
-        <div class="profile-avatar mb-3">
-            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-        </div>
+
+        <form action="{{ url('update_profile') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <!-- Hidden File Input -->
+            <input type="file" name="profile_pic" id="profilePicInput" hidden accept="image/*">
+
+            <!-- Clickable Avatar -->
+            <label for="profilePicInput" style="cursor:pointer;">
+                {{-- <div class="profile-avatar mb-2">
+                    @if(auth()->user()->profile && auth()->user()->profile->profile_pic)
+                        <img src="{{ asset('profile/'.auth()->user()->profile->profile_pic) }}" class="avatar-img-large">
+                    @else
+                        {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                    @endif
+                </div> --}}
+
+                <div class="profile-avatar mb-2" id="avatarPreview">
+                    @if(auth()->user()->profile && auth()->user()->profile->profile_pic)
+                        <img src="{{ asset('profile/'.auth()->user()->profile->profile_pic) }}" class="avatar-img-large" id="avatarImg">
+                    @else
+                        <div id="avatarInitial">
+                            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                        </div>
+                    @endif
+                </div>                    
+
+
+            </label>
+                <br>
+
+            <div class="d-flex justify-content-center gap-2 mt-2">
+
+                <button type="submit" class="profile-save-btn" id="saveBtn" style="display:none;">
+                    Save Photo
+                </button>
+
+                <button type="button" class="btn btn-danger" id="removeAvatarBtn" style="display:none;">
+                    Remove
+                </button>
+
+            </div>
+        </form>
+
+        <hr>
 
         <!-- User Info -->
-        <h6>{{ auth()->user()->name }}</h6>
+        <h6 class="mb-1">{{ auth()->user()->name }}</h6>
         <p class="text-muted">Email: {{ auth()->user()->email }}</p>
 
         <hr>
@@ -132,16 +180,59 @@
 <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 
 <script>
-            document.getElementById("menu-toggle").addEventListener("click",function(){
-                document.body.classList.toggle("sidebar-collapsed");
-            });
+    document.getElementById("menu-toggle").addEventListener("click", function () {
+        document.body.classList.toggle("sidebar-collapsed");
+    });
 
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    // TOOLTIP
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
-    </script>
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+
+    // PROFILE AVATAR UPLOAD LOGIC
+
+    const fileInput = document.getElementById("profilePicInput");
+    const saveBtn = document.getElementById("saveBtn");
+    const removeBtn = document.getElementById("removeAvatarBtn");
+    const avatarPreview = document.getElementById("avatarPreview");
+
+    let originalAvatar = avatarPreview.innerHTML;
+
+    // IMAGE SELECT
+    fileInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            avatarPreview.innerHTML = `
+                <img src="${e.target.result}" class="avatar-img-large" id="avatarImg">
+            `;
+
+            saveBtn.style.display = "inline-block";
+            removeBtn.style.display = "inline-block";
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+
+        // REMOVE IMAGE (RESET)
+        removeBtn.addEventListener("click", function () {
+
+            fileInput.value = "";
+            avatarPreview.innerHTML = originalAvatar;
+
+            saveBtn.style.display = "none";
+            removeBtn.style.display = "none";
+        });
+
+</script>
 
 </body>
 

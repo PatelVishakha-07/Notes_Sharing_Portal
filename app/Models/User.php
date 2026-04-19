@@ -46,6 +46,10 @@ class User extends Authenticatable
         return $this->hasMany(RejectedNotes::class,"user_id");
     }
 
+    public function profile(){
+        return $this->hasOne(ProfilePic::class,"user_id");
+    }
+
     /**
      * Get the attributes that should be cast.
      *

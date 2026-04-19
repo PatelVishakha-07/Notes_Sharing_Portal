@@ -33,7 +33,7 @@
 
                 <tr>
 
-                    <td>{{$pn->id}}</td>
+                    <td>{{ $loop->iteration }}</td>
 
                     <td>
                         <div class="d-flex align-items-center gap-2"> <span>{{$pn->user->name}} </span> </div>
@@ -50,9 +50,7 @@
                     <td>
                         <div class="d-flex flex-wrap gap-1">
                             @foreach ($pn->filePath as $fp)
-                                <a href="{{ url('/file/view/'.$fp->file_path) }}" target="_blank" class="browse-btn">
-                                    📄 View
-                                </a>                               
+                                <a href="{{ url('/view-file/'.$fp->file_path) }}" target="_blank" class="browse-btn"> 📄 View </a>                              
                                                               
                             @endforeach
                             {{-- YOUTUBE LINK --}}  
@@ -109,6 +107,12 @@
         </table>
     </div>
 
+</div>
+
+{{-- ================= Pagination ================= --}}
+<div class="mt-3 small-pagination">
+    {{-- {{ $notes->appends(request()->query())->links() }} --}}
+    {{ $pending_notes->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>
 
 @endsection

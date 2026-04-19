@@ -33,7 +33,7 @@ class SubjectController extends Controller
     }
 
     public function listSubject(){
-        $subject = Subject::with("category")->get();
+        $subject = Subject::with("category")->paginate(10);
         return view("admin.subject.list_subject",compact("subject"));
     }
 

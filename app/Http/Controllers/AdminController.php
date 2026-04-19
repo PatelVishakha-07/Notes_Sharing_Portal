@@ -32,7 +32,7 @@ class AdminController extends Controller
     }
 
     public function showPendingNotesList(){
-        $pending_notes = Notes::with("user","category","subject","filePath","youtubeLink")->where("status","Pending")->get();
+        $pending_notes = Notes::with("user","category","subject","filePath","youtubeLink")->where("status","Pending")->paginate(10);
         return view("admin.pending_notes", compact("pending_notes"));
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Favourite;
 use App\Models\Notes;
+use App\Models\Profile;
+use App\Models\ProfilePic;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
@@ -17,8 +19,15 @@ class UserController extends Controller
         $subject = Subject::get();
         $notes = Notes::with("filePath","category","subject","user","youtubeLink")->where("visibility","Public")->where("status","Approved");
 
-        if($request->search){
-            $notes = $notes->where("title","like","%".$request->search."%");
+        if ($request->search) {
+            $notes = $notes->where(function ($q) use ($request) {
+                $q->where("title", "like", "%" . $request->search . "%")
+                ->orWhereHas("user", function ($uq) use ($request) {
+                    $uq->where("name", "like", "%" . $request->search . "%");
+                });
+
+            });
+
         }
 
         if($request->category){
@@ -97,5 +106,31 @@ class UserController extends Controller
         $notes = $notes->get();
         
         return view("user.favourite_list",compact("notes"));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            "profile_pic" => "required|image|mimes:jpg,png,jpeg"
+        ]);
+
+        $img = $request->file("profile_pic");
+        $img_nm = time() . "_" . $img->getClientOriginalName();
+
+        $img->move(public_path("profile"), $img_nm);
+
+        $profile = ProfilePic::where("user_id", auth()->id())->first();
+
+        if ($profile) {
+            $profile->profile_pic = $img_nm;
+            $profile->save();
+        } else {
+            ProfilePic::create([
+                "user_id" => auth()->id(),
+                "profile_pic" => $img_nm
+            ]);
+        }
+
+        return back()->with("success", "Profile Pic Updated");
     }
 }

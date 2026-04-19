@@ -26,7 +26,7 @@
             @foreach($subject as $s)
 
             <tr>
-                <td>{{$s->id}}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{$s->sub_name}}</td>
                 <td>
                     <span class="category-badge">
@@ -54,6 +54,12 @@
 
     </table>
 
+</div>
+
+{{-- ================= Pagination ================= --}}
+<div class="mt-3 small-pagination">
+    {{-- {{ $notes->appends(request()->query())->links() }} --}}
+    {{ $subject->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>
 
 @endsection

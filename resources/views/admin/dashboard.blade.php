@@ -111,7 +111,7 @@
 
                     <tr style="vertical-align: middle;">
 
-                        <td class="text-muted">{{ $note->id }}</td>
+                        <td class="text-muted"> {{ $notes->firstItem() + $loop->index }}</td>
 
                         <td>
                             <div class="text-truncate" style="max-width:180px;"> {{ $note->title }} </div>
@@ -181,9 +181,8 @@
 
 {{-- ================= Pagination ================= --}}
 <div class="mt-3 small-pagination">
-    {{ $notes->appends(request()->query())->links() }}
+    {{-- {{ $notes->appends(request()->query())->links() }} --}}
+    {{ $notes->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>
-
-
 
 @endsection

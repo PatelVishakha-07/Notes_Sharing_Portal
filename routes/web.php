@@ -18,6 +18,9 @@ Route::post("update_password",[AuthController::class,"updatePassword"]);
 Route::get("change_name",[AuthController::class,"showChangeNamePage"]);
 Route::post("update_name",[AuthController::class,"updateName"]);
 
+//profile pic change
+Route::post("update_profile",[UserController::class,"updateProfile"]);
+
 //Logout
 Route::get("logout",[AuthController::class,"logout"]);
 

@@ -63,9 +63,15 @@
         <div class="user-box d-flex align-items-center gap-2">
 
         <!-- Avatar (Initial) -->
-            <div class="avatar">
-               <a href="#" data-bs-toggle="offcanvas" data-bs-target="#userSidebar">
-                    {{ auth()->user() ? strtoupper(substr(auth()->user()->name,0,1)) : 'G' }} 
+            <div class="avatar"> 
+                <a href="#" data-bs-toggle="offcanvas" data-bs-target="#userSidebar">
+                    
+                    @if(auth()->user()->profile && auth()->user()->profile->profile_pic)
+                        <img src="{{ asset('profile/'.auth()->user()->profile->profile_pic) }}"  class="avatar-img">
+                    @else
+                        {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                    @endif
+
                 </a>
             </div>
 
@@ -96,24 +102,43 @@
 
 {{-- ============       Side bar to show user information       ========================== --}}
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="userSidebar">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="userSidebar" data-bs-backdrop="true" data-bs-scroll="false">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Profile</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
 
     <div class="offcanvas-body text-center">
-        
         <!-- Avatar Circle -->
-        <div class="profile-avatar mb-3">
-            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-        </div>
+        <form action="{{ url('update_profile') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-        <!-- User Info -->
-        <h6>{{ auth()->user()->name }}</h6>
-        <p class="text-muted">Email: {{ auth()->user()->email }}</p>
+            <!-- Hidden File Input -->
+            <input type="file" name="profile_pic" id="profilePicInput" hidden accept="image/*">
+
+            @error('profile_pic')
+                <p class="alert-error "> {{$message}} </p>
+            @enderror
+
+            <!-- Clickable Avatar -->
+            <label for="profilePicInput" style="cursor:pointer;">
+                <div class="profile-avatar mb-2">
+                    @if(auth()->user()->profile && auth()->user()->profile->profile_pic)
+                        <img src="{{ asset('profile/'.auth()->user()->profile->profile_pic) }}" class="avatar-img-large">
+                    @else
+                        {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                    @endif
+                </div>
+            </label>
+                <br>
+            <button type="submit" class="profile-save-btn" id="saveBtn" style="display: none"> Save Photo </button>
+        </form>
 
         <hr>
+
+        <!-- User Info -->
+        <h6 class="mb-1">{{ auth()->user()->name }}</h6>
+        <p class="text-muted">Email: {{ auth()->user()->email }}</p>
 
         <!-- Buttons -->
         <a href="{{ url('change_name') }}" class="btn btn-primary w-100 mb-2">
@@ -133,16 +158,34 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 
-        <script>
-            document.getElementById("menu-toggle").addEventListener("click",function(){
-                document.body.classList.toggle("sidebar-collapsed");
-            });
+    <script>
+        document.getElementById("menu-toggle").addEventListener("click",function(){
+            document.body.classList.toggle("sidebar-collapsed");
+        });
 
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
-        </script>
+        });
+
+        const fileInput = document.getElementById("profilePicInput");
+        const saveBtn = document.getElementById("saveBtn");
+
+        fileInput.addEventListener("change", function () {
+            if (fileInput.files.length > 0) {
+                saveBtn.style.display = "inline-block";
+            } else {
+                saveBtn.style.display = "none";
+            }
+        });
+
+        fileInput.addEventListener("change", function () {
+            saveBtn.style.display = fileInput.files.length ? "inline-block" : "none";
+        });
+
+    </script>
+
+
     </body>
 </html>

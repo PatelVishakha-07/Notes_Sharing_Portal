@@ -213,6 +213,7 @@
     </div>
 </div>
 
+
 {{-- code for add to favourite --}}
 <script>
     function toggleFav(noteId, btn){

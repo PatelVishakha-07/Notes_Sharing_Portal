@@ -22,7 +22,7 @@
 
         <!-- SEARCH -->
         <input type="text" name="search" value="{{ request('search') }}"
-            placeholder="enter notes title..."
+            placeholder="notes title or username..."
             style="padding:6px 10px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
 
         <!-- CATEGORY -->
@@ -160,13 +160,11 @@
         </div>
 
     @endforeach
+</div>
 
-    <div class="d-flex justify-content-center mt-4">
+<div class="d-flex justify-content-center mt-4">
     {{ $notes->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>
-
-</div>
-
 
 {{-- code for add to favourite --}}
 <script>

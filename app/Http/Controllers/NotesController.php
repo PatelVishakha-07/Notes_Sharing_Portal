@@ -16,13 +16,13 @@ use Illuminate\Support\Str;
 class NotesController extends Controller
 {
     public function uploadNotePage(){
-        $category = Category::get();
-        $subject = Subject::get();
+        $category = Category::orderBy('cat_name', 'asc')->get();
+        $subject = Subject::orderBy('sub_name', 'asc')->get();
         return view("user.upload", compact("category","subject"));
     }
 
     public function getSubjects($cat_id){
-        $subject = Subject::where("cat_id",$cat_id)->get();
+        $subject = Subject::where("cat_id",$cat_id)->orderBy("sub_name","asc")->get();
         return response()->json($subject);
     }
 
@@ -37,7 +37,8 @@ class NotesController extends Controller
             "title"=>"required|min:3",
             "cat_id"=>"required",
             "sub_id"=>"required",
-            "file"=>"required"
+            "file"=>"required",
+            "file.*"  => "file|max:10240"            
         ]);
 
         $user = auth()->user();
@@ -115,7 +116,7 @@ class NotesController extends Controller
         }
 
         // STEP 3: Final result
-        $notes = $notes->latest()->get();
+        $notes = $notes->latest()->paginate(2);
 
         return view("user.list", compact("notes","status","category","subject"));
     }
@@ -152,7 +153,7 @@ class NotesController extends Controller
             $notes = $notes->whereIn("user_id",$userId);
         }
 
-        $notes = $notes->get();
+        $notes = $notes->paginate(10);
 
         return view("user.search", compact("category","subject","notes"));
     }

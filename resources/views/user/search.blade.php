@@ -106,7 +106,7 @@
 
                         <tr>
 
-                            <td>{{$n->id}}</td>
+                            <td>{{ $notes->firstItem() + $loop->index }}</td>
                             <td>{{$n->title}}</td>
 
                             <td> <span class="badge badge-soft-success"> {{$n->user->name}} </span> </td>
@@ -117,9 +117,7 @@
                                 <div class="d-flex justify-content-center gap-1">
                                     {{-- PDF Files --}}
                                     @foreach ($n->filePath as $fp)
-                                        <a href="{{ asset('storage/'.$fp->file_path) }}" 
-                                        target="_blank" 
-                                        class="btn btn-sm py-0 px-2" 
+                                        <a href="{{ asset('storage/'.$fp->file_path) }}"  target="_blank" class="btn btn-sm py-0 px-2" 
                                         style="background: #6366f1; color: white; font-size: 10px; line-height: 2;">
                                         View
                                         </a>                                   
@@ -128,9 +126,7 @@
                                     {{-- Youtube Links --}}
                                     @if(!empty($n->youtubeLink))
                                         @foreach ($n->youtubeLink as $yt)
-                                            <a href="{{ $yt->youtube_link }}" 
-                                            target="_blank" 
-                                            class="btn btn-sm py-0 px-2" 
+                                            <a href="{{ $yt->youtube_link }}"  target="_blank"  class="btn btn-sm py-0 px-2" 
                                             style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
                                             Watch
                                             </a>
@@ -153,5 +149,10 @@
         </div>
         @endif
     </div>
+
+{{-- ================= Pagination ================= --}}
+<div class="mt-3 small-pagination">
+    {{ $notes->appends(request()->query())->links() }}
+</div>
 
 @endsection

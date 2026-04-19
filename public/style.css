@@ -448,21 +448,21 @@ select.form-control:focus {
 }
 
 .profile-avatar {
-    width: 70px;
-    height: 70px;
-    margin: auto;
-
-    display: flex;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    overflow: hidden;   /* 🔥 THIS FIXES BIG IMAGE ISSUE */
+    background: #6366f1;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    display: inline-block;
     align-items: center;
     justify-content: center;
-
-    background-color: #0d6efd;
-    color: #fff;
-
-    border-radius: 50%;
-    font-size: 28px;
-    font-weight: bold;
+    margin: auto;
+    position: relative;
 }
+
 
 
 /* Browse button */
@@ -766,4 +766,121 @@ select.form-control:focus {
 
 .watch-btn:hover {
     background: #dc2626;
+}
+
+
+/* Avatar Container */
+.profile-avatar {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    font-size: 34px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Profile Image */
+.avatar-img-large {
+     width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+}
+
+/* Edit Button (FIXED LOOK) */
+.edit-profile-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    background: white;
+    color: #4f46e5;
+    border: 1px solid #dcdcdc;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+/* Hover */
+.edit-profile-btn:hover {
+    background: #4f46e5;
+    color: white;
+    border-color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+/* Name */
+.offcanvas-body h6 {
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Email */
+.offcanvas-body p {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+/* Divider */
+.offcanvas-body hr {
+    margin: 18px 0;
+}
+
+/* Buttons spacing */
+.offcanvas-body .btn {
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.profile-save-btn {
+    margin-top: 6px;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: #9333ea;
+    color: white;
+    border: none;
+}
+
+.profile-save-btn:hover {
+    background: #4338ca;
+}
+
+.remove-avatar-btn{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ff3b3b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+    line-height: 26px;
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-avatar-btn:hover{
+    background: #e60000;
 }

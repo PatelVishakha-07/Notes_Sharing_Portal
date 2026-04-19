@@ -78,98 +78,120 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($notes as $n)
-                        <tr>
-                            <td class="ps-3 text-muted" style="font-size: 11px;">{{$n->id}}</td>
+    @if($notes->count() > 0)
+        @foreach ($notes as $n)
+            <tr>
+                <td class="ps-3 text-muted" style="font-size: 11px;">
+                    {{ $notes->firstItem() + $loop->index }}
+                </td>
 
-                            <td class="fw-bold text-dark" style="font-size: 12px; line-height: 1.4;">
-                                {{ Str::limit($n->title, 35) }}
-                            </td>
+                <td class="fw-bold text-dark" style="font-size: 12px; line-height: 1.4;">
+                    {{ Str::limit($n->title, 35) }}
+                </td>
 
-                            <td>
-                                <span class="badge badge-soft-info" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
-                                    {{$n->category->cat_name}}
-                                </span>
-                            </td>
+                <td>
+                    <span class="badge badge-soft-info" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
+                        {{$n->category->cat_name}}
+                    </span>
+                </td>
 
-                            <td>
-                                <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
-                                    {{$n->subject->sub_name}}
-                                </span>
-                            </td>
+                <td>
+                    <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
+                        {{$n->subject->sub_name}}
+                    </span>
+                </td>
 
-                            <td>
-                                <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
-                                    {{$n->status}}
-                                </span>
-                            </td>
+                <td>
+                    <span class="badge badge-soft-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
+                        {{$n->status}}
+                    </span>
+                </td>
 
-                            <td class="text-muted" style="font-size: 11px; white-space: nowrap;">
-                                {{ $n->created_at->format('d M y') }}
-                            </td>
+                <td class="text-muted" style="font-size: 11px; white-space: nowrap;">
+                    {{ $n->created_at->format('d M y') }}
+                </td>
 
-                            @if($status == "Private")
-                                <td>
-                                    <div class="d-flex flex-column gap-1">
-                                        <code class="text-primary bg-light px-1 rounded text-center" style="font-size: 10px;">{{$n->access_code}}</code>
-                                        <span role="button" class="text-muted text-center" onclick="copyCode('{{$n->access_code}}')" style="font-size: 9px; cursor: pointer;"><u>Copy</u></span>
-                                    </div>
-                                </td>
-                            @endif
+                @if($status == "Private")
+                    <td>
+                        <div class="d-flex flex-column gap-1">
+                            <code class="text-primary bg-light px-1 rounded text-center" style="font-size: 10px;">
+                                {{$n->access_code}}
+                            </code>
+                            <span role="button" class="text-muted text-center"
+                                  onclick="copyCode('{{$n->access_code}}')"
+                                  style="font-size: 9px; cursor: pointer;">
+                                <u>Copy</u>
+                            </span>
+                        </div>
+                    </td>
+                @endif
 
-                            <td>
-                                @foreach ($n->filePath as $fp)
-                                    <div class="d-flex flex-column gap-1 mb-2"> 
-                                       <a href="{{ url('view-file/'.$fp->file_path) }}" 
-                                            target="_blank" 
-                                            class="btn btn-sm py-0 px-2 text-center"
-                                            style="background: #6366f1; color: white; font-size: 9px;">
-                                                View
-                                        </a>      
+                <td>
+                    @foreach ($n->filePath as $fp)
+                        <div class="d-flex flex-column gap-1 mb-2">
+                            <a href="{{ url('view-file/'.$fp->file_path) }}"
+                               target="_blank"
+                               class="btn btn-sm py-0 px-2 text-center"
+                               style="background: #6366f1; color: white; font-size: 9px;">
+                                View
+                            </a>
 
-                                        <a href="{{ asset('storage/'.$fp->file_path) }}" 
-                                           download 
-                                           class="btn btn-sm py-0 px-2 text-center" 
-                                           style="background: #22c55e; color: white; font-size: 9px; line-height: 1.6; border-radius: 4px;">
-                                            Download
+                            <a href="{{ asset('storage/'.$fp->file_path) }}"
+                               download
+                               class="btn btn-sm py-0 px-2 text-center"
+                               style="background: #22c55e; color: white; font-size: 9px; line-height: 1.6; border-radius: 4px;">
+                                Download
+                            </a>
+
+                            @if($n->youtubeLink && $n->youtubeLink->count() > 0)
+                                @foreach ($n->youtubeLink as $yt)
+                                    @if(!empty($yt->youtube_link))
+                                        <a href="{{ $yt->youtube_link }}" target="_blank"
+                                           class="btn btn-sm py-0 px-2"
+                                           style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
+                                            Watch
                                         </a>
-
-                                        @if($n->youtubeLink && $n->youtubeLink->count() > 0)
-                                            @foreach ($n->youtubeLink as $yt)
-                                                @if(!empty($yt->youtube_link))
-                                                    <a href="{{ $yt->youtube_link }}"  target="_blank"  class="btn btn-sm py-0 px-2" 
-                                                    style="background: #ef4444; color: white; font-size: 10px; line-height: 2;">
-                                                        Watch
-                                                    </a>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    </div>
+                                    @endif
                                 @endforeach
-                            </td>
-
-                            <td class="text-end pe-3">
-                                <div class="d-flex flex-column gap-1 align-items-end">
-                                    <a href="{{url('user/edit_notes_page/'.$n->id)}}" 
-                                       class="btn btn-outline-success py-0 px-2 w-100" 
-                                       style="font-size: 10px; line-height: 1.8; max-width: 60px;">
-                                        Edit
-                                    </a>
-                                    <a href="{{url('user/delete_notes/'.$n->id)}}" 
-                                       class="btn btn-outline-danger py-0 px-2 w-100" 
-                                       style="font-size: 10px; line-height: 1.8; max-width: 60px;"
-                                       onclick="return confirm('Delete this note?')">
-                                        Delete
-                                    </a>
-                                                                        
-                                </div>
-                            </td>
-                        </tr>
+                            @endif
+                        </div>
                     @endforeach
-                </tbody>
+                </td>
+
+                <td class="text-end pe-3">
+                    <div class="d-flex flex-column gap-1 align-items-end">
+                        <a href="{{url('user/edit_notes_page/'.$n->id)}}"
+                           class="btn btn-outline-success py-0 px-2 w-100"
+                           style="font-size: 10px; line-height: 1.8; max-width: 60px;">
+                            Edit
+                        </a>
+
+                        <a href="{{url('user/delete_notes/'.$n->id)}}"
+                           class="btn btn-outline-danger py-0 px-2 w-100"
+                           style="font-size: 10px; line-height: 1.8; max-width: 60px;"
+                           onclick="return confirm('Delete this note?')">
+                            Delete
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @else
+        <tr>
+            <td colspan="{{ $status == 'Private' ? 9 : 8 }}" class="text-center py-4 text-muted">
+                🚫 No notes available
+            </td>
+        </tr>
+    @endif
+</tbody>
             </table>
         </div>
     </div>
+</div>
+
+{{-- ================= Pagination ================= --}}
+<div class="mt-3 small-pagination">
+    {{ $notes->appends(request()->query())->links() }}
 </div>
 
 <script>

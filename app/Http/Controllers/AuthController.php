@@ -57,14 +57,13 @@ class AuthController extends Controller
         $privateNotesCount = Notes::where("visibility","Private")->where("user_id",FacadesAuth::user()->id)->get()->count();
         $totalNotes = Notes::where("user_id",FacadesAuth::user()->id)->get()->count();
         
-        $notes = Notes::with('filePath', 'subject')->where('visibility', 'Public')->where("status","Approved")->get();
+        $notes = Notes::with('filePath', 'subject')->where('visibility', 'Public')->where("status","Approved")->take(12)->get();
 
         $favouriteCount = Favourite::where("user_id",auth()->id())->get()->count();
 
         foreach($notes as $n){
             $n->is_favourite = Favourite::where("user_id", auth()->id())->where("notes_id", $n->id)->exists();
         }
-
 
         return view("user.dashboard", compact("privateNotesCount","publicNotesCount","totalNotes","notes","favouriteCount"));
     }

@@ -51,14 +51,31 @@ Access notes, share knowledge, and collaborate with students.
     @csrf
     
     <label class="text-sm text-gray-600">Email</label>
-    <input type="email" name="email" class="input-field" placeholder="Email">
+    <div class="relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2">
+            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+        </span>
+        <input type="email" name="email" class="input-field pl-10" placeholder="Email">
+    </div>
 
     @error('email')
     <p class="alert-error">{{ $message }}</p>
     @enderror
 
     <label class="text-sm text-gray-600">Password</label>
-    <input type="password" name="password" class="input-field" placeholder="Password">
+    <div class="relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"> 
+            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
+            </svg>
+        </span>
+
+        <input type="password" name="password" class="input-field pl-10" placeholder="Password">
+    </div>
 
     @error('password')
     <p class="alert-error">{{ $message }}</p>

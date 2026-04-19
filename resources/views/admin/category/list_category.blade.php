@@ -31,7 +31,7 @@
             <tbody>
                 @forelse($category as $c)
                 <tr>
-                    <td>{{$c->id}}</td>
+                    <td>{{ $loop->iteration }}</td>
 
                     <td>
                         <span class="fw-semibold">{{$c->cat_name}}</span>
@@ -66,6 +66,12 @@
         </table>
     </div>
 
+</div>
+
+{{-- ================= Pagination ================= --}}
+<div class="mt-3 small-pagination">
+    {{-- {{ $notes->appends(request()->query())->links() }} --}}
+    {{ $category->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>
 
 @endsection
