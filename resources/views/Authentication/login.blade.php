@@ -66,15 +66,36 @@ Access notes, share knowledge, and collaborate with students.
     @enderror
 
     <label class="text-sm text-gray-600">Password</label>
+
     <div class="relative">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"> 
+        <!-- icon -->
+        <span class="absolute left-3 top-1/2 -translate-y-1/2">
             <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
+                    d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
             </svg>
         </span>
 
-        <input type="password" name="password" class="input-field pl-10" placeholder="Password">
+        <!-- password input -->
+        <input type="password" id="password" name="password"
+            class="input-field pl-10 pr-10"
+            placeholder="Password">
+
+        <!-- eye button -->
+        <button type="button"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            onclick="togglePassword()">
+
+            <!-- eye icon -->
+            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+                    -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+        </button>
     </div>
 
     @error('password')
@@ -94,6 +115,14 @@ Access notes, share knowledge, and collaborate with students.
 </div>
 
 </div>
+
+<script>
+    function togglePassword() {
+        const input = document.getElementById("password");
+        const type = input.type === "password" ? "text" : "password";
+        input.type = type;
+    }
+</script>
 
 </body>
 </html>
