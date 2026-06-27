@@ -1,59 +1,72 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Notes Sharing Portal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web-based platform where users upload and share study notes — optionally with a YouTube link — with an admin moderation workflow, public/private visibility controls, and a trust-based system for managing user behavior.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sharing notes informally (scattered drives, chat groups) makes it hard to trust the quality of what's shared and gives no way to control who sees what. This portal solves that with three things working together: every upload goes through admin approval before it's visible, users choose whether their notes are public or restricted to people they share an access code with, and repeated low-quality or incorrect uploads are tracked per user so admins can act on a pattern rather than a single bad submission.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Note Uploads with Optional Video Link** — users upload notes and can attach a YouTube link alongside them
+- **Admin Approval Workflow** — every upload is reviewed by an admin and approved or rejected before it's visible to others
+- **Public / Private Visibility** — note owners choose whether a note is public or private; private notes are only accessible to others via a code shared by the owner
+- **Rejection Tracking & Account Moderation** — each user's rejection count is visible to them, giving admins a clear signal to deactivate accounts that repeatedly upload incorrect or low-quality content
+- **Search & Favorites** — users can search public notes and save them to a favorites list for quick access later
+- **Subject & Category Management** — admins maintain the subjects and categories notes are organized under
+- **Authentication** — separate access levels for regular users and admins
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Layer | Technology |
+|---|---|
+| Backend | Laravel (PHP) |
+| Frontend | Blade, CSS |
+| Database | MySQL |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Getting Started
 
-## Laravel Sponsors
+### Prerequisites
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP and Composer installed
+- Node.js and npm installed
+- MySQL server running locally or remotely
 
-### Premium Partners
+### Setup
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. Clone the repository
+   ```
+   git clone https://github.com/PatelVishakha-07/Notes_Sharing_Portal.git
+   ```
+2. Install PHP dependencies
+   ```
+   composer install
+   ```
+3. Install JS dependencies and build assets
+   ```
+   npm install && npm run build
+   ```
+4. Copy `.env.example` to `.env` and set your database credentials
+5. Generate the application key and run migrations
+   ```
+   php artisan key:generate
+   php artisan migrate
+   ```
+6. Run the application
+   ```
+   php artisan serve
+   ```
 
-## Contributing
+## How It Works
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Admins** set up the subjects and categories notes can be organized under
+2. A **user** uploads a note, optionally attaching a YouTube link, and sets its visibility to public or private
+3. The upload enters a **pending** state and is sent to the admin for review
+4. The **admin** approves or rejects the note; rejections count against the uploading user, and that count is visible to the user
+5. If a user accumulates too many rejections, indicating repeated incorrect or low-quality uploads, an **admin** can deactivate their account
+6. Once approved, **public notes** are searchable and visible to all users, who can save any public note to their **favorites**
+7. **Private notes** stay hidden from search and are only accessible to someone who has the **access code** shared by the note's owner
 
-## Code of Conduct
+## Author
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Vishakha Patel** — [LinkedIn](https://www.linkedin.com/in/patelvishakha-tech)
