@@ -1,168 +1,259 @@
 <!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
 
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap&font-display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
 
-            <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <title>Register | NotePortal</title>
+</head>
 
-            <title>Register | NotePortal</title>
-        </head>
+<body class="bg-[#f8fafc] min-h-screen flex items-center justify-center p-4 lg:p-8">
 
-        <body class="bg-[#f8fafc] min-h-screen flex items-center justify-center p-4 lg:p-8">
+<div class="auth-container grid lg:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
 
-            <div class="auth-container grid lg:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
-                <!-- LEFT PANEL -->
-                <div class="hidden lg:flex auth-left p-16 flex-col justify-center text-white">
+    <!-- LEFT PANEL -->
+    <div class="hidden lg:flex auth-left p-16 flex-col justify-center text-white">
+        <h1 class="text-4xl font-bold mb-6">
+            Join the <span class="text-indigo-400">Knowledge Network</span>
+        </h1>
+        <p class="text-slate-400">Create your account and start sharing notes.</p>
+    </div>
 
-                <h1 class="text-4xl font-bold mb-6"> Join the <span class="text-indigo-400">Knowledge Network</span> </h1>
+    <!-- RIGHT PANEL -->
+    <div class="auth-right p-8 lg:p-16 flex flex-col justify-center">
 
-                <p class="text-slate-400"> Create your account and start sharing notes. </p>
-            </div>
+        <h2 class="heading-main mb-2">Create Account</h2>
+        <p class="text-muted mb-6">Register below</p>
 
-        <!-- RIGHT PANEL -->
-            <div class="auth-right p-8 lg:p-16 flex flex-col justify-center">
-                <h2 class="heading-main mb-2">Create Account</h2>
-                <p class="text-muted mb-6">Register below</p>
-                <div class="max-w-md w-full mx-auto">
+        <div class="max-w-md w-full mx-auto">
 
-                @if(session('error'))
-                    <p class="alert-error text-red-500 mb-3">
-                        {{ session('error') }}
-                    </p>
-                @endif
+            @if(session('error'))
+                <div class="alert-error mb-4" role="alert">{{ session('error') }}</div>
+            @endif
 
-            <form action="{{url('process_register')}}" method="POST" class="space-y-4">
+            <form action="{{ url('process_register') }}" method="POST" class="space-y-4" novalidate>
                 @csrf
 
-            <!-- NAME -->
-            <label class="text-sm text-gray-600">Full Name</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10M4 18h10"/>
-                    </svg>
-                </span>
-                <input type="text" name="name" class="input-field pl-10" placeholder="Full Name">
-            </div>
-            @error('name')
-            <p class="alert-error">{{ $message }}</p>
-            @enderror
+                {{-- NAME --}}
+                <div>
+                    <label for="reg-name" class="text-sm text-gray-600">Full Name</label>
+                    <div class="relative mt-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h10M4 18h10"/>
+                            </svg>
+                        </span>
+                        <input
+                            type="text"
+                            id="reg-name"
+                            name="name"
+                            class="input-field pl-10 @error('name') border-red-400 @enderror"
+                            placeholder="John Doe"
+                            value="{{ old('name') }}"
+                            autocomplete="name"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+                    @error('name')
+                        <p class="alert-error mt-1" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
 
+                {{-- EMAIL --}}
+                <div>
+                    <label for="reg-email" class="text-sm text-gray-600">Email</label>
+                    <div class="relative mt-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </span>
+                        <input
+                            type="email"
+                            id="reg-email"
+                            name="email"
+                            class="input-field pl-10 @error('email') border-red-400 @enderror"
+                            placeholder="you@example.com"
+                            value="{{ old('email') }}"
+                            autocomplete="email"
+                            maxlength="254"
+                            required
+                        >
+                    </div>
+                    @error('email')
+                        <p class="alert-error mt-1" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!-- EMAIL -->
-            <label class="text-sm text-gray-600">Email</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                    </svg>
-                </span>
-                <input type="email" name="email" class="input-field pl-10" placeholder="Email">
-            </div>
-            @error('email')
-            <p class="alert-error">{{ $message }}</p>
-            @enderror
+                {{-- PASSWORD --}}
+                <div>
+                    <label for="reg-password" class="text-sm text-gray-600">Password</label>
+                    <div class="relative mt-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
+                            </svg>
+                        </span>
+                        <input
+                            type="password"
+                            id="reg-password"
+                            name="password"
+                            class="input-field pl-10 pr-10 @error('password') border-red-400 @enderror"
+                            placeholder="Min 8 characters"
+                            autocomplete="new-password"
+                            maxlength="128"
+                            required
+                            oninput="updateStrength(this.value)"
+                        >
+                        <button
+                            type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            onclick="togglePassword('reg-password', 'eye-reg')"
+                            aria-label="Toggle password visibility"
+                        >
+                            <svg id="eye-reg" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+                                    -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
 
+                    {{-- Password Strength Meter --}}
+                    <div id="strength-bar-wrap" class="mt-2" style="display:none;">
+                        <div style="background:#e2e8f0; border-radius:999px; height:5px; overflow:hidden;">
+                            <div id="strength-bar" style="height:100%; width:0%; border-radius:999px; transition:width 0.3s, background 0.3s;"></div>
+                        </div>
+                        <p id="strength-label" class="text-xs mt-1" style="color:#64748b;"></p>
+                    </div>
 
-            <!-- PASSWORD -->
-            <label class="text-sm text-gray-600">Password</label>
+                    @error('password')
+                        <p class="alert-error mt-1" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
-                    </svg>
-                </span>
+                {{-- CONFIRM PASSWORD --}}
+                <div>
+                    <label for="reg-confirm" class="text-sm text-gray-600">Confirm Password</label>
+                    <div class="relative mt-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
+                            </svg>
+                        </span>
+                        <input
+                            type="password"
+                            id="reg-confirm"
+                            name="password_confirmation"
+                            class="input-field pl-10 pr-10 @error('password_confirmation') border-red-400 @enderror"
+                            placeholder="Repeat your password"
+                            autocomplete="new-password"
+                            maxlength="128"
+                            required
+                            oninput="checkMatch()"
+                        >
+                        <button
+                            type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            onclick="togglePassword('reg-confirm', 'eye-confirm')"
+                            aria-label="Toggle confirm password visibility"
+                        >
+                            <svg id="eye-confirm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+                                    -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="match-msg" class="text-xs mt-1" style="display:none;"></p>
+                    @error('password_confirmation')
+                        <p class="alert-error mt-1" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                <input type="password" id="password" name="password"
-                    class="input-field pl-10 pr-10"
-                    placeholder="Password">
+                <button type="submit" class="btn-primary w-full mt-2">Register</button>
 
-                <button type="button"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                    onclick="togglePassword('password','eye1')">
+            </form>
 
-                    <svg id="eye1" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
-                            -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                </button>
-            </div>
-
-            @error('password')
-            <p class="alert-error">{{ $message }}</p>
-            @enderror
-
-
-            <!-- CONFIRM PASSWORD -->
-            <label class="text-sm text-gray-600">Confirm Password</label>
-
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3zm6 8H6v-1a6 6 0 0112 0v1z"/>
-                    </svg>
-                </span>
-
-                <input type="password" id="confirm_password" name="password_confirmation"
-                    class="input-field pl-10 pr-10"
-                    placeholder="Confirm Password">
-
-                <button type="button"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                    onclick="togglePassword('confirm_password','eye2')">
-
-                    <svg id="eye2" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
-                            -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                </button>
-            </div>
-
-            @error('password_confirmation')
-            <p class="alert-error">{{ $message }}</p>
-            @enderror
-
-            <button class="btn-primary w-full mt-2">Register</button>
-        </form>
         </div>
 
-        <div class="mt-4 text-center">
-            <a href="{{url('login')}}" class="text-indigo-600 font-semibold">Already have account?</a>
+        <div class="mt-6 text-center text-sm">
+            <span class="text-gray-500">Already have an account?</span>
+            <a href="{{ url('login') }}" class="text-indigo-600 font-semibold ml-1">Login</a>
         </div>
 
-        </div>
+    </div>
 
-        </div>
+</div>
 
-    </body>
+<script>
+    /* ---- Toggle eye icon ---- */
+    function togglePassword(inputId, eyeId) {
+        const input = document.getElementById(inputId);
+        const eye   = document.getElementById(eyeId);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        eye.style.opacity = isHidden ? '0.5' : '1';
+    }
 
-    <script>
-        function togglePassword(inputId, eyeId) {
-            const input = document.getElementById(inputId);
-            const eye = document.getElementById(eyeId);
+    /* ---- Password strength ---- */
+    function updateStrength(value) {
+        const wrap  = document.getElementById('strength-bar-wrap');
+        const bar   = document.getElementById('strength-bar');
+        const label = document.getElementById('strength-label');
 
-            if (input.type === "password") {
-                input.type = "text";
-                eye.style.opacity = "0.5";
-            } else {
-                input.type = "password";
-                eye.style.opacity = "1";
-            }
+        if (!value) { wrap.style.display = 'none'; return; }
+        wrap.style.display = 'block';
+
+        let score = 0;
+        if (value.length >= 8)              score++;
+        if (/[A-Z]/.test(value))            score++;
+        if (/[0-9]/.test(value))            score++;
+        if (/[^A-Za-z0-9]/.test(value))     score++;
+
+        const levels = [
+            { pct: '25%',  color: '#ef4444', text: 'Weak' },
+            { pct: '50%',  color: '#f97316', text: 'Fair' },
+            { pct: '75%',  color: '#eab308', text: 'Good' },
+            { pct: '100%', color: '#22c55e', text: 'Strong' },
+        ];
+        const lvl = levels[score - 1] || levels[0];
+        bar.style.width      = lvl.pct;
+        bar.style.background = lvl.color;
+        label.style.color    = lvl.color;
+        label.textContent    = lvl.text;
+    }
+
+    /* ---- Confirm match ---- */
+    function checkMatch() {
+        const pw  = document.getElementById('reg-password').value;
+        const cf  = document.getElementById('reg-confirm').value;
+        const msg = document.getElementById('match-msg');
+        if (!cf) { msg.style.display = 'none'; return; }
+        msg.style.display = 'block';
+        if (pw === cf) {
+            msg.style.color = '#22c55e';
+            msg.textContent = '✓ Passwords match';
+        } else {
+            msg.style.color = '#ef4444';
+            msg.textContent = '✗ Passwords do not match';
         }
-    </script>
-</html>
+    }
+</script>
 
+</body>
+</html>

@@ -28,9 +28,9 @@ Route::get("logout",[AuthController::class,"logout"]);
 Route::get("admin_dashboard",[AuthController::class,"adminDashboard"])->middleware("isAdmin");
 
 //User
-Route::get("user_dashboard",[AuthController::class,"userDashboard"]);
+Route::get("user_dashboard",[AuthController::class,"userDashboard"])->middleware("isUser");
 
-Route::prefix("user")->group(function(){
+Route::prefix("user")->middleware("isUser")->group(function(){
     Route::get("/upload_notes",[NotesController::class,"uploadNotePage"]);
     Route::post("/save_notes",[NotesController::class,"saveNote"]);
     Route::get("/getSubjects/{cat_id}",[NotesController::class,"getSubjects"]);
@@ -48,14 +48,11 @@ Route::prefix("user")->group(function(){
 });
 
 
-
-
 //Authentication
 Route::get("login",[AuthController::class,"loginPage"]);
 Route::post("process_login",[AuthController::class,"processLogin"]);
 Route::get("register",[AuthController::class,"registerPage"]);
 Route::post("process_register",[AuthController::class,"processRegister"]);
-
 
 
 Route::middleware(["isAdmin"])->group(function(){
@@ -84,13 +81,12 @@ Route::middleware(["isAdmin"])->group(function(){
 
 });
 
-
+//Home Controller
 Route::get('/', [HomeController::class, "home"]);
 Route::get('home/note/view/{id}', [HomeController::class, "viewHomeNote"])->middleware("auth");
 
 
 
-//route to open the notes in new tab
 /*
 Route::get('/view-file/{file}', function ($file) {
 
@@ -108,6 +104,7 @@ Route::get('/view-file/{file}', function ($file) {
     ]);
 });  */
 
+//route to open the notes in new tab
 
 Route::get('/view-file/{file}', function ($file) {
 

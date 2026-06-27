@@ -2,194 +2,206 @@
 
 @section('content')
 
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-<link href="{{ asset('jquery-3.6.0.min.js') }}" rel="stylesheet">
-
-<!-- HEADER + FILTER -->
-<form method="GET" action="{{ url('user/all_notes') }}" 
-      style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
-
-    <!-- LEFT TITLE -->
+{{-- ===== HEADER + FILTER FORM ===== --}}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
-        <h2 style="margin:0; font-size:18px; font-weight:700;">🌍 Public Notes</h2>
-        <p class="text-muted" style="margin:2px 0 0; font-size:12px;">
-            Browse all publicly shared notes
-        </p>
+        <h4 class="fw-bold mb-0" style="color:#0f172a;">🌍 Public Notes</h4>
+        <small class="text-muted">Browse all publicly shared notes</small>
     </div>
+</div>
 
-    <!-- RIGHT FILTERS -->
-    <div style="display:flex; gap:40px; align-items:center;">
+<form method="GET" action="{{ url('user/all_notes') }}" class="mb-4">
+    <div class="search-pill">
+        <span>🔍</span>
+        <input
+            type="text"
+            name="search"
+            class="search-input"
+            placeholder="Search by title or uploader..."
+            value="{{ request('search') }}"
+        >
 
-        <!-- SEARCH -->
-        <input type="text" name="search" value="{{ request('search') }}"
-            placeholder="notes title or username..."
-            style="padding:6px 10px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
-
-        <!-- CATEGORY -->
-        <select name="category"
-            style="padding:6px 8px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
+        <select name="category" class="filter-select">
             <option value="">Category</option>
             @foreach($category ?? [] as $cat)
-                <option value="{{ $cat->id }}" 
-                    {{ request('category') == $cat->id ? 'selected' : '' }}>
+                <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
                     {{ $cat->cat_name }}
                 </option>
             @endforeach
         </select>
 
-        <!-- SUBJECT -->
-        <select name="subject"
-            style="padding:6px 8px; font-size:12px; border:1px solid #e2e8f0; border-radius:8px;">
+        <select name="subject" class="filter-select">
             <option value="">Subject</option>
             @foreach($subject ?? [] as $sub)
-                <option value="{{ $sub->id }}" 
-                    {{ request('subject') == $sub->id ? 'selected' : '' }}>
+                <option value="{{ $sub->id }}" {{ request('subject') == $sub->id ? 'selected' : '' }}>
                     {{ $sub->sub_name }}
                 </option>
             @endforeach
         </select>
 
-        <!-- BUTTON -->
-        <button type="submit"
-            style="padding:6px 12px; font-size:12px; border-radius:8px; background:#2563eb; color:white; border:none;">
-            🔍 Search
-        </button>
+        <button type="submit" class="search-btn">Filter</button>
 
-        <!-- CLEAR FILTER -->
         @if(request('search') || request('category') || request('subject'))
-            <a href="{{ url('user/all_notes') }}"
-               style="font-size:14px; text-decoration:none; color:#ef4444;">
-                ✕
-            </a>
+            <a href="{{ url('user/all_notes') }}" class="clear-btn">✕</a>
         @endif
-
     </div>
-
 </form>
 
+{{-- ===== GRID ===== --}}
+<div class="row g-3">
+    @forelse($notes as $note)
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="note-grid-card position-relative h-100">
 
-
-<!-- GRID -->
-<div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; ">
-
-    @foreach($notes as $note)
-
-        <div class="card p-2" style="height:290px; display:flex; flex-direction:column; border-radius:12px; overflow:hidden; ">
-
-            <!-- TOP BAR (TITLE + STAR) -->
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 4px; ">
-
-                <div style=" font-size:12px; font-weight:600;
-                    color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80%; ">
-                    {{ $note->title }}
-                </div>
-
-                <!-- FAVORITE BUTTON -->
+                {{-- FAV BUTTON --}}
+                {{-- Bug fix: was $note->is_favorite (wrong), correct key is is_favourite --}}
                 <button
                     onclick="toggleFav({{ $note->id }}, this)"
-                    class="{{ $note->is_favourite ? 'fav-active' : '' }}"
-                    style="background:none; border:none; cursor:pointer; font-size:16px;">
-                    {{ $note->is_favorite ? '★' : '☆' }}
+                    class="favorite-btn {{ $note->is_favourite ? 'fav-active' : '' }}"
+                    aria-label="{{ $note->is_favourite ? 'Remove from favourites' : 'Add to favourites' }}">
+                    {{ $note->is_favourite ? '★' : '☆' }}
                 </button>
 
-            </div>
-
-            <!-- preview of notes -->
-            <div style="height:140px; background:#f1f5f9; border-radius:10px;
-                overflow:hidden; display:flex; align-items:center; justify-content:center; ">
-
-                @if(isset($note->filePath[0]))
-                    <iframe
-                        src="{{ url('/view-file/'.$note->filePath[0]->file_path) }}#page=1&zoom=00"
-                        style="width:100%; height:100%; border:none; pointer-events:none;">
-                    </iframe>
-                @else
-                    <span style="font-size:12px; color:#64748b;"> No Preview </span>
-                @endif
-
-            </div>
-
-            <!-- user name and subject name -->
-            <div style="padding:6px 4px;">
-
-                <div style="font-size:11px; color:#64748b;">
-                    👤 {{ $note->user->name ?? 'Unknown User' }}
+                {{-- PREVIEW --}}
+                <div class="note-preview-box">
+                    @if(isset($note->filePath[0]))
+                        <iframe
+                            src="{{ url('/view-file/'.$note->filePath[0]->file_path) }}#page=1&zoom=00"
+                            style="width:100%; height:100%; border:none; pointer-events:none;"
+                            loading="lazy"
+                            title="{{ $note->title }} preview">
+                        </iframe>
+                    @elseif($note->youtubeLink && $note->youtubeLink->count() > 0)
+                        <div style="font-size:28px; color:#ef4444;">▶</div>
+                        <small class="note-preview-label">VIDEO LESSON</small>
+                    @else
+                        <div style="font-size:24px; color:#94a3b8;">📄</div>
+                        <small class="note-preview-label">No Preview</small>
+                    @endif
                 </div>
 
-                <div style="font-size:11px; color:#64748b;">
-                    📘 {{ $note->subject->sub_name }}
+                {{-- CARD BODY --}}
+                <div class="p-3">
+                    <span class="subject-badge-pill">{{ $note->subject->sub_name ?? 'General' }}</span>
+
+                    <h6 class="mt-2 mb-0 fw-bold text-truncate" style="font-size:13px; color:#0f172a;">
+                        {{ $note->title }}
+                    </h6>
+                    <p class="mb-3 mt-1" style="font-size:11px; color:#64748b;">
+                        👤 {{ $note->user->name ?? 'Unknown' }}
+                    </p>
+
+                    {{-- FILE ACTIONS --}}
+                    @if(isset($note->filePath[0]))
+                        <div class="d-flex gap-1 mb-2">
+                            <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
+                               target="_blank"
+                               class="btn btn-sm note-btn-view flex-grow-1">
+                                View
+                            </a>
+                            <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
+                               class="btn btn-sm note-btn-dl px-2"
+                               title="Download">
+                                ↓
+                            </a>
+                        </div>
+                    @endif
+
+                    {{-- YOUTUBE LINKS --}}
+                    @if($note->youtubeLink && $note->youtubeLink->count() > 0)
+                        <div class="d-flex flex-column gap-1">
+                            @foreach($note->youtubeLink as $idx => $link)
+                                @if(!empty($link->youtube_link))
+                                    <a href="{{ $link->youtube_link }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="btn btn-sm note-btn-yt">
+                                        🎥 Watch Video{{ $idx > 0 ? ' '.($idx+1) : '' }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
             </div>
-
-            <!-- Buttons to download or view notes -->
-            <div style="display:flex; gap:6px; padding:0 4px 6px; ">
-
-                @if(isset($note->filePath[0]))
-
-                    <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
-                    target="_blank"
-                    style="flex:1; font-size:10px; padding:3px 6px; border-radius:6px;
-                            text-align:center; text-decoration:none; background:#2563eb; color:white; display:inline-block; ">
-                        View </a>
-
-                    <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
-                    style="flex:1; font-size:10px; padding:3px 6px; border-radius:6px;
-                            text-align:center; text-decoration:none; background:#16a34a; color:white; display:inline-block; ">
-                        Download </a>
-
-                @endif                
-
-            </div>
-
-            @if($note->youtubeLink && $note->youtubeLink->count() > 0)
-                    <div style="padding:0 4px 6px;">
-                        @foreach($note->youtubeLink as $index  => $link)
-                            @if(!empty($link->youtube_link))
-                                <a href="{{ $link->youtube_link }}" 
-                                target="_blank"
-                                style="display:block; font-size:11px; color:#2563eb; text-decoration:none; margin-bottom:2px;">
-                                    🎥 Watch Video {{ $index + 1 }}
-                                </a>
-                            @endif
-                        @endforeach
-                    </div>
-
-                @endif
-
         </div>
-
-    @endforeach
+    @empty
+        <div class="col-12 text-center py-5 text-muted">
+            <div style="font-size:38px;">🔍</div>
+            <p class="mt-2">No notes found. Try adjusting your filters.</p>
+            <a href="{{ url('user/all_notes') }}" class="btn-add text-decoration-none py-2 px-4">Clear Filters</a>
+        </div>
+    @endforelse
 </div>
 
-<div class="d-flex justify-content-center mt-4">
+{{-- ===== PAGINATION ===== --}}
+<div class="d-flex justify-content-center mt-4 small-pagination">
     {{ $notes->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>
 
-{{-- code for add to favourite --}}
 <script>
-    function toggleFav(noteId, btn){
-        $.ajax({
-            url:"/user/add_to_fav/" + noteId,
-            type:"POST",
-            data: {
-                _token: "{{csrf_token()}}"
-            },
-            success: function(data){
-                if(data.status === "added"){
-                    $(btn).html('★');
-                    $(btn).addClass("fav-active");
-                }else{
-                    $(btn).html('☆');
-                    $(btn).removeClass("fav-active");
-                }
-            },
-            error: function(){
-                alert("Something went wrong!");
+function toggleFav(noteId, btn) {
+    $.ajax({
+        url: '/user/add_to_fav/' + noteId,
+        type: 'POST',
+        data: { _token: '{{ csrf_token() }}' },
+        success: function(data) {
+            if (data.status === 'added') {
+                $(btn).html('★').addClass('fav-active');
+            } else {
+                $(btn).html('☆').removeClass('fav-active');
             }
-        });
-    }
+        },
+        error: function() {
+            alert('Something went wrong. Please try again.');
+        }
+    });
+}
 </script>
 
-@endsection
+<style>
+.note-grid-card {
+    border-radius: 14px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    transition: 0.25s ease;
+    overflow: hidden;
+}
+.note-grid-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    border-color: #c7d2fe;
+}
+.note-preview-box {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #e2e8f0;
+    overflow: hidden;
+    gap: 4px;
+}
+.note-preview-label { font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase; }
+.subject-badge-pill {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 6px;
+}
+.note-btn-view { background:#4f46e5; color:white; font-size:11px; font-weight:600; border-radius:6px; padding: 5px 0; }
+.note-btn-view:hover { background:#4338ca; color:white; }
+.note-btn-dl { border:1px solid #d1fae5; color:#059669; background:#f0fdf4; font-size:13px; border-radius:6px; }
+.note-btn-dl:hover { background:#059669; color:white; border-color:#059669; }
+.note-btn-yt { background:#ef4444; color:white; font-size:11px; font-weight:600; border-radius:6px; }
+.note-btn-yt:hover { background:#dc2626; color:white; }
+</style>
 
+@endsection

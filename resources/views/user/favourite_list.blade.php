@@ -2,220 +2,245 @@
 
 @section('content')
 
-<script src="{{ asset('jquery-3.6.0.min.js') }}"></script>
-
-<style>
-    .fav-header {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:18px;
-    }
-
-    .fav-title {
-        font-size:18px;
-        font-weight:700;
-    }
-
-    .fav-sub {
-        font-size:12px;
-        color:#6b7280;
-    }
-
-    .search-box {
-        border:1px solid #e5e7eb;
-        border-radius:8px;
-        padding:5px 10px;
-        font-size:12px;
-        outline:none;
-    }
-
-    .notes-grid {
-        display:grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap:16px;
-    }
-
-    .note-card {
-        height:290px;
-        display:flex;
-        flex-direction:column;
-        border-radius:12px;
-        overflow:hidden;
-        border:1px solid #e5e7eb;
-        background:white;
-        transition:0.3s;
-    }
-
-    .note-card:hover {
-        transform:translateY(-4px);
-        box-shadow:0 8px 20px rgba(0,0,0,0.08);
-    }
-
-    .fav-btn {
-        background:none;
-        border:none;
-        cursor:pointer;
-        font-size:16px;
-    }
-
-    .fav-active {
-        color:#facc15;
-    }
-
-    .preview-box {
-        height:140px;
-        background:#f1f5f9;
-        border-radius:10px;
-        overflow:hidden;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-    }
-
-    .btn-sm-custom {
-        font-size:10px;
-        padding:3px 6px;
-        border-radius:6px;
-        text-align:center;
-        text-decoration:none;
-        color:white;
-        display:inline-block;
-    }
-
-    .btn-view { background:#2563eb; }
-    .btn-download { background:#16a34a; }
-
-    .empty-box {
-        text-align:center;
-        padding:60px 0;
-        color:#6b7280;
-    }
-</style>
-
-<div class="container py-3">
-
-    <!-- HEADER -->
-
-    <!-- HEADER -->
-<div class="fav-header">
-
+{{-- ===== HEADER ===== --}}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <div>
-        <div class="fav-title">❤️ My Favorite Notes</div>
-        <div class="fav-sub">All notes you’ve saved for quick access</div>
+        <h4 class="fw-bold mb-0" style="color:#0f172a;">❤️ My Favourite Notes</h4>
+        <small class="text-muted">All notes you've saved for quick access</small>
     </div>
 
-    <form method="GET" action="{{ url('user/fav_list') }}" class="search-form">
-
-        <input type="text" name="search" value="{{ request('search') }}"class="fav-search-box" placeholder="Search favorites...">
-
-        <button type="submit" class="search-btn"> 🔍 </button>
-
-        <a href="{{ url('user/all_notes') }}" class="browse-btn"> 📚 Browse Notes </a>
-
+    <form method="GET" action="{{ url('user/fav_list') }}" class="d-flex gap-2 align-items-center">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            class="fav-search-box"
+            placeholder="Search favourites..."
+        >
+        <button type="submit" class="search-btn">🔍</button>
+        <a href="{{ url('user/all_notes') }}" class="browse-btn">📚 Browse Notes</a>
     </form>
-
 </div>
 
-    
-    <!-- EMPTY STATE -->
-    @if($notes->isEmpty())
-        <div class="empty-box">
-            <h5>💔 No Favorites Yet</h5>
-            <p>Start adding notes to your favorites ⭐</p>
-        </div>
-    @else
+{{-- ===== EMPTY STATE ===== --}}
+@if($notes->isEmpty())
+    <div class="fav-empty">
+        <div style="font-size:48px; margin-bottom:12px;">💔</div>
+        <h5 style="color:#374151; font-weight:700;">No Favourites Yet</h5>
+        <p style="color:#6b7280; font-size:13px;">Star any note to save it here for quick access.</p>
+        <a href="{{ url('user/all_notes') }}" class="btn-add text-decoration-none py-2 px-4 mt-2 d-inline-block">
+            Browse Public Notes
+        </a>
+    </div>
 
-    <!-- GRID -->
-    <div class="notes-grid">
+@else
 
-        @foreach($notes as $note)
+{{-- ===== GRID ===== --}}
+<div class="row g-3">
+    @foreach($notes as $note)
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="fav-card h-100">
 
-        <div class="note-card">
-
-            <!-- TOP -->
-            <div style="display:flex; justify-content:space-between; padding:6px 6px;">
-                
-                <div style="font-size:12px; font-weight:600; max-width:80%; overflow:hidden; text-overflow:ellipsis;">
-                    {{ $note->title }}
+                {{-- TOP BAR --}}
+                <div class="fav-card-top">
+                    <span class="fav-card-title" title="{{ $note->title }}">
+                        {{ Str::limit($note->title, 26) }}
+                    </span>
+                    <button
+                        onclick="toggleFav({{ $note->id }}, this)"
+                        class="fav-star-btn fav-active"
+                        aria-label="Remove from favourites">
+                        ★
+                    </button>
                 </div>
 
-                <!-- ⭐ REMOVE FROM FAVORITES -->
-                <button onclick="toggleFav({{ $note->id }}, this)" class="fav-btn fav-active">
-                    ★
-                </button>
+                {{-- PREVIEW (icon-based for performance — no iframe per card) --}}
+                <div class="fav-preview">
+                    @if(isset($note->filePath[0]))
+                        <span style="font-size:32px;">📄</span>
+                        <small class="fav-preview-label">PDF NOTE</small>
+                    @elseif($note->youtubeLink && $note->youtubeLink->count() > 0)
+                        <span style="font-size:32px; color:#ef4444;">▶</span>
+                        <small class="fav-preview-label">VIDEO</small>
+                    @else
+                        <span style="font-size:28px; color:#94a3b8;">📁</span>
+                        <small class="fav-preview-label">No Preview</small>
+                    @endif
+                </div>
+
+                {{-- META --}}
+                <div class="fav-card-meta">
+                    <div>👤 {{ $note->user->name ?? 'Unknown' }}</div>
+                    <div>📘 {{ $note->subject->sub_name ?? 'General' }}</div>
+                </div>
+
+                {{-- ACTIONS --}}
+                <div class="fav-card-actions">
+                    @if(isset($note->filePath[0]))
+                        <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
+                           target="_blank"
+                           class="fav-btn-view">
+                            View
+                        </a>
+                        <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
+                           class="fav-btn-dl">
+                            ↓ Save
+                        </a>
+                    @endif
+                    @if($note->youtubeLink && $note->youtubeLink->count() > 0)
+                        @foreach($note->youtubeLink as $yt)
+                            @if(!empty($yt->youtube_link))
+                                <a href="{{ $yt->youtube_link }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="fav-btn-yt">
+                                    ▶ Watch
+                                </a>
+                            @endif
+                        @endforeach
+                    @endif
+                </div>
 
             </div>
-
-            <!-- PREVIEW -->
-            <div class="preview-box">
-
-                @if(isset($note->filePath[0]))
-                    <iframe
-                        src="{{ url('/view-file/'.$note->filePath[0]->file_path) }}#page=1&zoom=00"
-                        style="width:100%; height:100%; border:none; pointer-events:none;">
-                    </iframe>
-                @else
-                    <span style="font-size:12px;">No Preview</span>
-                @endif
-
-            </div>
-
-            <!-- DETAILS -->
-            <div style="padding:6px; font-size:11px; color:#64748b;">
-                👤 {{ $note->user->name ?? 'Unknown' }} <br>
-                📘 {{ $note->subject->sub_name ?? 'General' }}
-            </div>
-
-            <!-- ACTIONS -->
-            <div style="display:flex; gap:6px; padding:0 6px 6px;">
-
-                @if(isset($note->filePath[0]))
-
-                <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
-                   target="_blank"
-                   class="btn-sm-custom btn-view"
-                   style="flex:1;">
-                   View
-                </a>
-
-                <a href="{{ url('/view-file/'.$note->filePath[0]->file_path) }}"
-                   class="btn-sm-custom btn-download"
-                   style="flex:1;">
-                   Download
-                </a>
-
-                @endif
-
-            </div>
-
         </div>
-
-        @endforeach
-
-    </div>
-
-    @endif
-
+    @endforeach
 </div>
 
-<!-- TOGGLE SCRIPT -->
+{{-- PAGINATION --}}
+@if($notes->hasPages())
+    <div class="d-flex justify-content-center mt-4 small-pagination">
+        {{ $notes->appends(request()->query())->links('pagination::bootstrap-5') }}
+    </div>
+@endif
+
+@endif
+
 <script>
-function toggleFav(noteId, btn){
+function toggleFav(noteId, btn) {
     $.ajax({
-        url:"/user/add_to_fav/" + noteId,
-        type:"POST",
-        data:{ _token:"{{ csrf_token() }}" },
-        success:function(res){
-            if(res.status === "removed"){
-                // remove card smoothly
-                $(btn).closest('.note-card').fadeOut(300, function(){
+        url: '/user/add_to_fav/' + noteId,
+        type: 'POST',
+        data: { _token: '{{ csrf_token() }}' },
+        success: function(res) {
+            if (res.status === 'removed') {
+                $(btn).closest('.col-6, .col-md-4, .col-lg-3').fadeOut(280, function() {
                     $(this).remove();
+                    // show empty state if no cards remain
+                    if ($('.fav-card').length === 0) {
+                        location.reload();
+                    }
                 });
             }
+        },
+        error: function() {
+            alert('Something went wrong. Please try again.');
         }
     });
 }
 </script>
+
+<style>
+.fav-empty {
+    text-align: center;
+    padding: 70px 0;
+    color: #6b7280;
+}
+
+.fav-card {
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.fav-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    border-color: #c7d2fe;
+}
+
+.fav-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px 6px;
+    gap: 8px;
+}
+.fav-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+.fav-star-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #facc15;
+    line-height: 1;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.fav-preview {
+    flex: 1;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    gap: 6px;
+}
+.fav-preview-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fav-card-meta {
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.6;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.fav-card-actions {
+    display: flex;
+    gap: 6px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+}
+
+.fav-btn-view, .fav-btn-dl, .fav-btn-yt {
+    flex: 1;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 8px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    min-width: 50px;
+    transition: 0.2s;
+}
+.fav-btn-view { background: #4f46e5; color: white; }
+.fav-btn-view:hover { background: #4338ca; color: white; }
+.fav-btn-dl { background: #f0fdf4; color: #059669; border: 1px solid #d1fae5; }
+.fav-btn-dl:hover { background: #059669; color: white; }
+.fav-btn-yt { background: #ef4444; color: white; }
+.fav-btn-yt:hover { background: #dc2626; color: white; }
+</style>
 
 @endsection
