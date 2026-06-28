@@ -39,11 +39,16 @@
                                     <a href="{{ url('edit_category_page', $c->id) }}" class="btn-edit">
                                         ✏ Edit
                                     </a>
-                                    <a href="{{ url('delete_category', $c->id) }}"
-                                       class="btn-delete"
-                                       onclick="return confirm('Delete category \'{{ addslashes($c->cat_name) }}\'? This may affect linked subjects and notes.')">
-                                        🗑 Delete
-                                    </a>
+                                    {{-- Bug fix: was GET link — changed to POST form --}}
+                                    <form method="POST"
+                                          action="{{ url('delete_category', $c->id) }}"
+                                          onsubmit="return confirm('Delete category \'{{ addslashes($c->cat_name) }}\'? This may affect linked subjects and notes.')"
+                                          style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn-delete">
+                                            🗑 Delete
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

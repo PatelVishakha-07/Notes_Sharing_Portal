@@ -29,8 +29,15 @@
             <a href="{{ url('user/show_search_notes') }}" data-bs-toggle="tooltip" data-bs-placement="right"
             title="Search Notes"> 🔎 <span>Search Notes</span> </a>
             
-            <a href="{{url('logout')}}" style="color:#fb7185;" data-bs-toggle="tooltip" 
-            data-bs-placement="right" title="Logout">🚪 <span>Logout</span></a>
+            {{-- Bug fix: logout must be POST — GET logout is a CSRF risk --}}
+            <form method="POST" action="{{ url('logout') }}" style="margin:0;">
+                @csrf
+                <button type="submit"
+                    style="background:none; border:none; padding:0; width:100%; text-align:left; cursor:pointer; color:#fb7185;"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Logout">
+                    🚪 <span>Logout</span>
+                </button>
+            </form>
         </div>
 
        
@@ -152,8 +159,6 @@
     </div>
 </div>
 
-
-{{-- =================    JavaScript code for tool tip   ================= --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>

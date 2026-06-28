@@ -65,11 +65,13 @@
                                     Using a small form+button is semantically correct for
                                     actions that change server state, even for GET routes.
                                 --}}
+                                {{-- Bug fix: was method="GET" — state-changing action must be POST --}}
                                 <form
-                                    method="GET"
+                                    method="POST"
                                     action="{{ url('admin/toggle-user-status/'.$user->id) }}"
                                     onsubmit="return confirm('{{ $user->status == 1 ? 'Deactivate' : 'Activate' }} this user?')"
                                     style="display:inline;">
+                                    @csrf
                                     <button
                                         type="submit"
                                         class="user-status-btn {{ $user->status == 1 ? 'status-active' : 'status-inactive' }}">

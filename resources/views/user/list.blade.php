@@ -178,11 +178,17 @@
                                        class="list-action-btn list-edit-btn">
                                         Edit
                                     </a>
-                                    <a href="{{ url('user/delete_notes/'.$n->id) }}"
-                                       class="list-action-btn list-del-btn"
-                                       onclick="return confirm('Delete this note? This cannot be undone.')">
-                                        Delete
-                                    </a>
+                                    {{-- Bug fix: was GET link — changed to POST form so browsers
+                                         and crawlers cannot trigger accidental deletion --}}
+                                    <form method="POST"
+                                          action="{{ url('user/delete_notes/'.$n->id) }}"
+                                          onsubmit="return confirm('Delete this note? This cannot be undone.')"
+                                          style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="list-action-btn list-del-btn">
+                                            Delete
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
 

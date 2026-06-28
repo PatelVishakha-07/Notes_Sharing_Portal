@@ -43,11 +43,16 @@
                                     <a href="{{ url('edit_subject_page', $s->id) }}" class="btn-edit">
                                         ✏ Edit
                                     </a>
-                                    <a href="{{ url('delete_subject', $s->id) }}"
-                                       class="btn-delete"
-                                       onclick="return confirm('Delete subject \'{{ addslashes($s->sub_name) }}\'?')">
-                                        🗑 Delete
-                                    </a>
+                                    {{-- Bug fix: was GET link — changed to POST form --}}
+                                    <form method="POST"
+                                          action="{{ url('delete_subject', $s->id) }}"
+                                          onsubmit="return confirm('Delete subject \'{{ addslashes($s->sub_name) }}\'?')"
+                                          style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn-delete">
+                                            🗑 Delete
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

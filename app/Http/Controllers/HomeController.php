@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function home(){
-        $notes = Notes::with(['filePath', 'subject', 'category'])->has('filePath') 
-                ->where("visibility", "Public")->where("status","Approved")->latest()->take(20)->get();
-        return view("welcome", compact("notes"));
+    public function home()
+    {        
+        $notes = Notes::with(['filePath', 'subject', 'category', 'user'])
+            ->where('visibility', 'Public')
+            ->where('status', 'Approved')
+            ->latest()
+            ->paginate(20);
+
+        return view('welcome', compact('notes'));
     }
 }

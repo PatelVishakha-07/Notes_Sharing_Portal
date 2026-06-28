@@ -33,8 +33,16 @@
     <a href="{{url('admin/showUsersList')}}" class="{{ request()->is('admin/showUsersList') ? 'active' : '' }}" 
         data-bs-placement="right" title="Users" data-bs-toggle="tooltip">👥 <span>Users</span></a>
 
-    <a href="{{url('logout')}}" style="color:#fb7185;"
-    data-bs-placement="right" title="Logout" data-bs-toggle="tooltip">🚪 <span>Logout</span></a>
+    {{-- Bug fix: logout must be POST — a GET logout allows a malicious
+         link on another site to log the user out without consent --}}
+    <form method="POST" action="{{ url('logout') }}" style="margin:0;">
+        @csrf
+        <button type="submit"
+            style="background:none; border:none; padding:0; width:100%; text-align:left; cursor:pointer; color:#fb7185;"
+            data-bs-placement="right" title="Logout" data-bs-toggle="tooltip">
+            🚪 <span>Logout</span>
+        </button>
+    </form>
 
 </div>
 
@@ -175,8 +183,6 @@
 </div>
 
 
-{{-- ================       JavaScript code for tootltip          =================================== --}}
-
 <script src="{{ asset('bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js') }}"></script>
 
 <script>
@@ -221,8 +227,6 @@
         reader.readAsDataURL(file);
     });
 
-
-        // REMOVE IMAGE (RESET)
         removeBtn.addEventListener("click", function () {
 
             fileInput.value = "";
@@ -236,4 +240,4 @@
 
 </body>
 
-</html> 
+</html>

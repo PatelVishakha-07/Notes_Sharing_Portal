@@ -2,62 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Notes;
 use App\Models\RejectedNotes;
-use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function showUserList(Request $request){
-        //$users = User::where("role","User")->withCount('notes');
-        $users = User::where("role","User")
-        ->withCount(['notes','notes as approved_notes_count' => function($q){
-             $q->where('status', "Approved"); }, "rejectedNotes"
-             ]);
+    // =========================================================
+    //  USERS LIST
+    // =========================================================
+    public function showUserList(Request $request)
+    {
+        $users = User::where('role', 'User')
+            ->withCount([
+                'notes',
+                // counts only approved notes
+                'notes as approved_notes_count' => fn($q) => $q->where('status', 'Approved'),
+                // uses the rejectedNotes relation on User model
+                'rejectedNotes as rejected_notes_count',
+            ]);
 
-
-        if($request->search){
-            $users->where(function ($q) use ($request) {
-            $q->where('name', 'like', '%' . $request->search . '%')
-              ->orWhere('email', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $users->where(function ($q) use ($search) {
+                $q->where('name',  'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
             });
         }
-        
+
         $users = $users->paginate(10);
 
-        return view("admin.list_user", compact("users"));
+        return view('admin.list_user', compact('users'));
     }
 
-    public function showPendingNotesList(){
-        $pending_notes = Notes::with("user","category","subject","filePath","youtubeLink")->where("status","Pending")->paginate(10);
-        return view("admin.pending_notes", compact("pending_notes"));
+    // =========================================================
+    //  PENDING NOTES
+    // =========================================================
+    public function showPendingNotesList()
+    {
+        $pending_notes = Notes::with('user', 'category', 'subject', 'filePath', 'youtubeLink')
+            ->where('status', 'Pending')
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.pending_notes', compact('pending_notes'));
     }
 
-    public function acceptRequest($val, $id){
-        if($val == 1){
-            $notes = Notes::find($id);
+    // =========================================================
+    //  APPROVE / REJECT NOTE
+    //
+    //  NOTE: the pending_notes blade was changed to use POST forms.
+    //  Update your route to Route::post() to match, e.g.:
+    //    Route::post('admin/acceptRequest/{val}/{id}', [AdminController::class,'acceptRequest']);
+    // =========================================================
+    public function acceptRequest($val, $id)
+    {
+        $notes = Notes::find($id);
+
+        if (!$notes) {
+            return redirect('admin/showPendingNotesList')
+                ->with('error', 'Note not found');
+        }
+
+        if ($val == 1) {
             $notes->status = 'Approved';
             $notes->save();
-        }
-        else if($val==0){
-            $notes = Notes::find($id);
+        } elseif ($val == 0) {
             $notes->status = 'Rejected';
             $notes->save();
 
-            $user_id = $notes->user_id;
-
-            RejectedNotes::create(["notes_id"=>$id, "user_id"=>$user_id]);
-
+            RejectedNotes::create([
+                'notes_id' => $notes->id,
+                'user_id'  => $notes->user_id,
+            ]);
         }
-        return redirect("admin/showPendingNotesList");
+
+        return redirect('admin/showPendingNotesList')
+            ->with('success', $val == 1 ? 'Note approved' : 'Note rejected');
     }
 
-
-    public function toggleUserStatus($id){
+    //  TOGGLE USER STATUS
+    public function toggleUserStatus($id)
+    {
         $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
 
         $user->status = $user->status == 1 ? 2 : 1;
         $user->save();
