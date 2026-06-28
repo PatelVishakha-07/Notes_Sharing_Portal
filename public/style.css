@@ -167,6 +167,34 @@ body {
 .card-number.red { color: #ef4444; }
 .favorite-card:hover { border-color: #fca5a5; }
 
+/* ================= PAGINATION ================= */
+.small-pagination { display: flex; justify-content: center; }
+.small-pagination .pagination { gap: 4px; }
+.small-pagination .page-link {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+}
+.small-pagination .page-item.active .page-link {
+    background: #6366f1;
+    border-color: #6366f1;
+    color: white;
+}
+.small-pagination .page-link:hover { background: #f1f5f9; }
+
+/* ================= CATEGORY BADGE (subject list) ================= */
+.category-badge {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
 
 /* ALERT */
 .alert-error {

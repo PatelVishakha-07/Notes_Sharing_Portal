@@ -3,43 +3,95 @@
 @section('content')
 
 <div class="row justify-content-center">
-
-    @if(session('error'))
-        <p class="alert-error text-red-500 mb-3">
-            {{ session('error') }}
-        </p>
-    @endif
-
-    <div class="col-md-7">
+    <div class="col-md-7 col-lg-6">
 
         <div class="card category-card">
 
             <div class="card-header">
-                <h4>Add New Category</h4>
-                <p>Create categories to organize your notes</p>
+                <h4>📂 Add New Category</h4>
+                <p>Create categories to organise your notes</p>
             </div>
 
             <div class="card-body">
 
-                <form method="POST" action="{{url('save_category')}}">
+                {{-- Error INSIDE the card, not outside --}}
+                @if(session('error'))
+                    <div class="admin-alert-error mb-3" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @error('cat_name')
+                    <div class="admin-alert-error mb-3" role="alert">{{ $message }}</div>
+                @enderror
+
+                <form method="POST" action="{{ url('save_category') }}" novalidate>
                     @csrf
 
-                    <div class="form-group">
-                        <label>Category Name</label>
-                        <input type="text" name="cat_name" class="input-field" placeholder="Example: Programming, AI, Math">
+                    <div class="admin-form-group">
+                        <label for="cat-name" class="admin-label">
+                            Category Name <span class="text-danger">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="cat-name"
+                            name="cat_name"
+                            class="admin-input @error('cat_name') is-invalid @enderror"
+                            placeholder="e.g. Programming, Mathematics, AI"
+                            maxlength="100"
+                            value="{{ old('cat_name') }}"
+                            required
+                            autocomplete="off"
+                        >
+                        <div class="admin-input-hint">Max 100 characters</div>
                     </div>
 
-                    <button type="submit" class="btn-primary mt-3">
-                        Add Category
-                    </button>
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn-primary">Add Category</button>
+                        <a href="{{ url('list_category') }}" class="btn-cancel">Cancel</a>
+                    </div>
 
                 </form>
-
             </div>
-
         </div>
 
     </div>
 </div>
+
+<style>
+.admin-form-group { margin-bottom: 16px; }
+.admin-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+.admin-input {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f9fafb;
+    color: #111827;
+    transition: 0.2s;
+    outline: none;
+}
+.admin-input:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+.admin-input-hint { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+.admin-alert-error {
+    background: #fee2e2;
+    border: 1px solid #f87171;
+    color: #b91c1c;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+</style>
 
 @endsection
